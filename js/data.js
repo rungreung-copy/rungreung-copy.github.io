@@ -100,51 +100,54 @@ const PRICE_BOARD = [
 /* ---------- เครื่องคำนวณราคา ----------
    price      = ราคาต่อหน่วย
    tiers      = ราคาขั้นบันได [{ min: จำนวนขั้นต่ำ, price }] (เรียงจากน้อยไปมาก)
-   startingAt = true ถ้าป้ายเขียนว่า "เริ่มต้นที่" (ราคาจริงอาจสูงกว่า) */
+   startingAt = true ถ้าป้ายเขียนว่า "เริ่มต้นที่" (ราคาจริงอาจสูงกว่า)
+   duplex     = true ถ้าเป็นงานหน้า/หลัง (คิดเป็นแผ่น = จำนวนหน้า ÷ 2 ปัดขึ้น)
+   printable  = true ที่หมวด → เลือกเป็น "งานพิมพ์" ให้ไฟล์ที่อัปโหลดได้ */
 const CALC_CATEGORIES = [
-  { id: "bw-copy", name: "ถ่ายเอกสาร ขาว-ดำ", items: [
-    { name: "A4 หน้าเดียว", unit: "หน้า", tiers: [{ min: 1, price: 1 }, { min: 20, price: 0.5 }, { min: 100, price: 0.4 }] },
-    { name: "A4 หน้า/หลัง", unit: "แผ่น", tiers: [{ min: 1, price: 2 }, { min: 20, price: 1 }, { min: 100, price: 0.8 }] },
-    { name: "A4 ถ่ายย่อ-ขยาย", unit: "หน้า", price: 1 },
-    { name: "F14 หน้าเดียว", unit: "หน้า", price: 1 },
-    { name: "F14 หน้า/หลัง", unit: "แผ่น", price: 2 },
-    { name: "B4 หน้าเดียว", unit: "หน้า", price: 2 },
-    { name: "B4 หน้า/หลัง", unit: "แผ่น", price: 3 },
-    { name: "A3 หน้าเดียว", unit: "หน้า", price: 3 },
-    { name: "A3 หน้า/หลัง", unit: "แผ่น", price: 6 },
-  ]},
-  { id: "id-copy", name: "สำเนาบัตรประชาชน / ทะเบียนบ้าน", items: [
-    { name: "บัตรประชาชน หน้า/หลัง", unit: "แผ่น", tiers: [{ min: 1, price: 2 }, { min: 20, price: 0.5 }] },
-    { name: "ทะเบียนบ้าน หน้า/หลัง", unit: "แผ่น", tiers: [{ min: 1, price: 2 }, { min: 20, price: 0.5 }] },
-  ]},
-  { id: "color-copy", name: "ถ่ายเอกสารสี", items: [
-    { name: "A4", unit: "หน้า", price: 5, startingAt: true },
-    { name: "F14", unit: "หน้า", price: 10, startingAt: true },
-    { name: "B4", unit: "หน้า", price: 10, startingAt: true },
-    { name: "A3", unit: "หน้า", price: 20, startingAt: true },
-  ]},
-  { id: "bw-print", name: "ปริ้นท์ ขาว-ดำ", items: [
+  { id: "bw-print", name: "ปริ้นท์ ขาว-ดำ", printable: true, items: [
     { name: "A4 ข้อความ", unit: "หน้า", price: 2 },
     { name: "A4 รูปภาพ", unit: "หน้า", price: 5 },
-    { name: "A4 หน้า/หลัง (100 หน้าขึ้นไป)", unit: "แผ่น", price: 3 },
+    // ป้าย: หน้า/หลัง 100 หน้าขึ้นไป (= 50 แผ่น) แผ่นละ 3 บาท · ต่ำกว่านั้นคิด 2 หน้า × 2 บาท (สมมติฐาน รอร้านยืนยัน)
+    { name: "A4 หน้า/หลัง", unit: "แผ่น", duplex: true, tiers: [{ min: 1, price: 4 }, { min: 50, price: 3 }] },
     { name: "F14", unit: "หน้า", price: 5, startingAt: true },
     { name: "B4", unit: "หน้า", price: 5, startingAt: true },
     { name: "A3", unit: "หน้า", price: 5, startingAt: true },
   ]},
-  { id: "color-print-a4", name: "ปริ้นท์สี A4", items: [
+  { id: "color-print-a4", name: "ปริ้นท์สี A4", printable: true, items: [
     { name: "สีไม่มาก (กระดาษธรรมดา)", unit: "หน้า", price: 5 },
     { name: "สีเต็มแผ่น (กระดาษธรรมดา)", unit: "หน้า", price: 10 },
     { name: "กระดาษแข็ง PVC 100 ปอนด์", unit: "หน้า", price: 15 },
     { name: "กระดาษโฟโต้ 180 แกรม", unit: "หน้า", price: 20 },
     { name: "กระดาษสติกเกอร์", unit: "หน้า", price: 20 },
   ]},
-  { id: "color-print-a3", name: "ปริ้นท์สี A3 / A3+", items: [
+  { id: "color-print-a3", name: "ปริ้นท์สี A3 / A3+", printable: true, items: [
     { name: "A3 สีไม่มาก (กระดาษธรรมดา)", unit: "หน้า", price: 20 },
     { name: "A3 สีเต็มแผ่น (กระดาษธรรมดา)", unit: "หน้า", price: 30 },
     { name: "A3 กระดาษแข็ง", unit: "หน้า", price: 40 },
     { name: "A3+ กระดาษแข็ง", unit: "หน้า", price: 50 },
     { name: "A3 กระดาษโฟโต้", unit: "หน้า", price: 50 },
     { name: "A3+ กระดาษโฟโต้", unit: "หน้า", price: 60 },
+  ]},
+  { id: "bw-copy", name: "ถ่ายเอกสาร ขาว-ดำ", printable: true, items: [
+    { name: "A4 หน้าเดียว", unit: "หน้า", tiers: [{ min: 1, price: 1 }, { min: 20, price: 0.5 }, { min: 100, price: 0.4 }] },
+    { name: "A4 หน้า/หลัง", unit: "แผ่น", duplex: true, tiers: [{ min: 1, price: 2 }, { min: 20, price: 1 }, { min: 100, price: 0.8 }] },
+    { name: "A4 ถ่ายย่อ-ขยาย", unit: "หน้า", price: 1 },
+    { name: "F14 หน้าเดียว", unit: "หน้า", price: 1 },
+    { name: "F14 หน้า/หลัง", unit: "แผ่น", duplex: true, price: 2 },
+    { name: "B4 หน้าเดียว", unit: "หน้า", price: 2 },
+    { name: "B4 หน้า/หลัง", unit: "แผ่น", duplex: true, price: 3 },
+    { name: "A3 หน้าเดียว", unit: "หน้า", price: 3 },
+    { name: "A3 หน้า/หลัง", unit: "แผ่น", duplex: true, price: 6 },
+  ]},
+  { id: "id-copy", name: "สำเนาบัตรประชาชน / ทะเบียนบ้าน", items: [
+    { name: "บัตรประชาชน หน้า/หลัง", unit: "แผ่น", tiers: [{ min: 1, price: 2 }, { min: 20, price: 0.5 }] },
+    { name: "ทะเบียนบ้าน หน้า/หลัง", unit: "แผ่น", tiers: [{ min: 1, price: 2 }, { min: 20, price: 0.5 }] },
+  ]},
+  { id: "color-copy", name: "ถ่ายเอกสารสี", printable: true, items: [
+    { name: "A4", unit: "หน้า", price: 5, startingAt: true },
+    { name: "F14", unit: "หน้า", price: 10, startingAt: true },
+    { name: "B4", unit: "หน้า", price: 10, startingAt: true },
+    { name: "A3", unit: "หน้า", price: 20, startingAt: true },
   ]},
   { id: "scan", name: "สแกน PDF / JPG", items: [
     { name: "สแกนเอกสาร", unit: "หน้า", price: 5 },
@@ -178,4 +181,32 @@ const CALC_CATEGORIES = [
     { name: "เนื้อใน: กระดาษโฟโต้", unit: "หน้า", price: 20 },
     { name: "เข้าเล่มอัดกาวเคลือบปก", unit: "เล่ม", price: 50 },
   ]},
+];
+
+/* ---------- เข้าเล่ม (ตัวเลือกเสริมของไฟล์ที่อัปโหลด) ----------
+   byThickness = ราคาตามช่วงความหนา (ตรงกับ THICKNESS_TIERS) */
+const THICKNESS_TIERS = [
+  { label: "ความหนา 0.1–1.5", maxCm: 1.5 },
+  { label: "ความหนา 1.6–2.5", maxCm: 2.5 },
+  { label: "ความหนา 2.6–3.0", maxCm: 3.0 },
+  { label: "ความหนา 3.0 ขึ้นไป", maxCm: Infinity },
+];
+const SHEETS_PER_CM = 100; // กระดาษ A4 80 แกรม ~100 แผ่น ≈ 1 ซม. (ใช้เดาความหนาเท่านั้น)
+const BIND_OPTIONS = [
+  { id: "perfect", name: "สันกาว + เคลือบปก", byThickness: [50, 60, 70, 100] },
+  { id: "perfect-plain", name: "สันกาว ไม่เคลือบปก", byThickness: [30, 40, 50, 80] },
+  { id: "tape", name: "สันเทป", price: 15, startingAt: true },
+  { id: "spiral", name: "สันเกลียว", price: 15, startingAt: true },
+  { id: "comb", name: "สันกระดูกงู", price: 15, startingAt: true },
+  { id: "saddle", name: "แบบมุงหลังคา", price: 5, startingAt: true },
+];
+
+/* ---------- หมวดผลงาน (การ์ด Fan-Out) ----------
+   id = ชื่อโฟลเดอร์ใน images/works/  · รูปในโฟลเดอร์ถูกอ่านอัตโนมัติ (js/works-manifest.js)
+   โฟลเดอร์ใหม่ที่ไม่มีในรายการนี้ก็แสดงได้ โดยใช้ชื่อโฟลเดอร์เป็นหัวข้อ */
+const WORK_CATEGORIES = [
+  { id: "binding", title: "เข้าเล่ม", desc: "สันกาว สันเกลียว สันเทป และงานเข้าเล่มจำนวนมาก" },
+  { id: "portfolio", title: "พอร์ตโฟลิโอ", desc: "ปกแข็ง PVC / โฟโต้ สีสดคมชัด" },
+  { id: "color-print", title: "ปริ้นท์สี / เคลือบ", desc: "โปสเตอร์ ป้ายเมนู สติกเกอร์ งานเคลือบ" },
+  { id: "stationery", title: "อุปกรณ์เครื่องเขียน", desc: "ปากกา สมุด แฟ้ม ครบในร้าน" },
 ];

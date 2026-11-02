@@ -143,11 +143,25 @@
         <div class="section__head reveal">
           <span class="eyebrow">คำนวณราคา</span>
           <h2>ประเมินค่าใช้จ่ายก่อนมาร้าน</h2>
-          <p>เลือกบริการ ใส่จำนวน แล้วดูราคาประมาณได้ทันที เพิ่มได้หลายรายการ</p>
+          <p>วางไฟล์งานแล้วเว็บนับหน้าให้เอง เลือกบริการ แล้วดูราคาประมาณได้ทันที</p>
         </div>
         <div class="calc reveal">
-          <div class="calc__rows" id="calcRows"></div>
-          <button class="btn btn--soft" id="calcAdd" type="button">+ เพิ่มรายการ</button>
+          <label class="drop" id="dropZone" for="fileInput">
+            <input type="file" id="fileInput" multiple accept=".pdf,application/pdf,image/*" class="sr-only">
+            <span class="drop__icon" aria-hidden="true">📂</span>
+            <strong class="drop__title">ลากไฟล์มาวางที่นี่ หรือ <u>คลิกเลือกไฟล์</u></strong>
+            <span class="drop__sub">รองรับ PDF และรูปภาพ (JPG, PNG) · นับจำนวนหน้าให้อัตโนมัติ</span>
+            <span class="drop__privacy">🔒 ไฟล์ไม่ถูกส่งออกจากเครื่องของคุณ เว็บแค่นับหน้าเพื่อคำนวณราคา</span>
+          </label>
+          <div class="calc__msg" id="calcMsg" role="status" aria-live="polite"></div>
+
+          <div class="jobs" id="jobs"></div>
+
+          <div class="calc__manual">
+            <div class="calc__rows" id="calcRows"></div>
+            <button class="btn btn--soft" id="calcAdd" type="button">+ เพิ่มงานที่ไม่มีไฟล์ (ถ่ายบัตร สแกน เคลือบบัตร ฯลฯ)</button>
+          </div>
+
           <div class="calc__total">
             <div>
               <span class="calc__label">ราคาประมาณ</span>
@@ -156,6 +170,10 @@
             <p class="calc__note" id="calcNote">
               * เป็นราคาประมาณเท่านั้น ราคาจริงทางร้านจะยืนยันอีกครั้งเมื่อเห็นงาน
             </p>
+            <a class="btn btn--line calc__send" data-line-link href="#contact">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5 1.1-.5 6-3.5 8.2-6.1C21.6 14.1 22 12.6 22 11c0-4.4-4.5-8-10-8Z"/></svg>
+              ส่งไฟล์ให้ร้านทาง LINE
+            </a>
           </div>
         </div>
       </div>
@@ -167,16 +185,9 @@
         <div class="section__head reveal">
           <span class="eyebrow">ตัวอย่างงาน</span>
           <h2>ผลงานจากร้านเรา</h2>
-          <p>งานจริงที่ลูกค้าไว้ใจให้ทางร้านทำ</p>
+          <p>งานจริงที่ลูกค้าไว้ใจให้ทางร้านทำ · ชี้หรือแตะที่กองรูปเพื่อกางดู คลิกรูปเพื่อดูภาพใหญ่</p>
         </div>
-        <div class="works">
-          <figure class="work reveal"><img src="images/crops/work-1.png" alt="เล่มรายงานพร้อมปก" loading="lazy"><figcaption>เล่มเอกสารพร้อมปก</figcaption></figure>
-          <figure class="work reveal"><img src="images/crops/work-2.png" alt="เข้าเล่มสันกาวจำนวนมาก" loading="lazy"><figcaption>เข้าเล่มสันกาวจำนวนมาก</figcaption></figure>
-          <figure class="work reveal"><img src="images/crops/work-3.png" alt="เข้าเล่มสันเกลียว" loading="lazy"><figcaption>เข้าเล่มสันเกลียว</figcaption></figure>
-          <figure class="work reveal"><img src="images/crops/work-4.png" alt="พอร์ตโฟลิโอ" loading="lazy"><figcaption>Portfolio ปกแข็ง</figcaption></figure>
-          <figure class="work reveal"><img src="images/crops/work-5.png" alt="ป้ายเมนูปริ้นท์สีเคลือบ" loading="lazy"><figcaption>ป้ายเมนูปริ้นท์สี + เคลือบ</figcaption></figure>
-          <figure class="work reveal"><img src="images/crops/work-6.png" alt="อุปกรณ์เครื่องเขียน" loading="lazy"><figcaption>อุปกรณ์เครื่องเขียน</figcaption></figure>
-        </div>
+        <div class="decks" id="decks"></div>
 
         <div class="portfolio-info reveal">
           <div class="portfolio-info__text">
@@ -280,7 +291,19 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5 1.1-.5 6-3.5 8.2-6.1C21.6 14.1 22 12.6 22 11c0-4.4-4.5-8-10-8Z"/></svg>
   </a>
 
+  <!-- Lightbox ดูรูปผลงาน -->
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="ดูรูปผลงาน">
+    <button class="lightbox__close" type="button" aria-label="ปิด">✕</button>
+    <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="รูปก่อนหน้า">‹</button>
+    <figure class="lightbox__figure">
+      <img class="lightbox__img" alt="">
+      <figcaption class="lightbox__cap"></figcaption>
+    </figure>
+    <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="รูปถัดไป">›</button>
+  </div>
+
   <script src="js/data.js"></script>
+  <script src="js/works-manifest.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
