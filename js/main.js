@@ -44,7 +44,8 @@
   /* =========================================================
      Price board
      ========================================================= */
-  $("#priceBoard").innerHTML = PRICE_BOARD.map((card) => `
+  // ปกติ scripts/prerender.mjs เขียนตารางไว้ใน HTML แล้ว — สร้างด้วย JS เฉพาะตอนยังไม่มี
+  if (!$("#priceBoard .pcard")) $("#priceBoard").innerHTML = PRICE_BOARD.map((card) => `
     <article class="pcard tone-${card.tone} reveal">
       <h3>${escapeHtml(card.title)}</h3>
       <table><tbody>
@@ -389,7 +390,7 @@
       if (!slot) return `<span class="deck__card deck__card--ghost" style="${style}" aria-hidden="true"></span>`;
       return `<button class="deck__card" type="button" data-index="${slot.index}" style="${style}"
         aria-label="ดูรูป ${escapeHtml(c.title)} รูปที่ ${slot.index + 1}">
-        <img src="${escapeHtml(slot.src)}" alt="" loading="lazy">
+        <img src="${escapeHtml(slot.src)}" alt="ตัวอย่างงาน${escapeHtml(c.title)} ร้านรุ่งเรือง ก๊อปปี้ รูปที่ ${slot.index + 1}" loading="lazy">
       </button>`;
     }).join("");
     return `

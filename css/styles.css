@@ -482,7 +482,11 @@ a.ccard:hover { background: rgba(255, 255, 255, .13); transform: translateX(4px)
 /* ---------- Footer ---------- */
 .footer { background: var(--navy-900); color: rgba(255, 255, 255, .6); padding: 28px 0; font-size: .92rem; }
 .footer__inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-.footer__logo { height: 64px; border-radius: 8px; }
+.footer__logo { height: 64px; width: auto; border-radius: 8px; }
+.footer__nap { font-style: normal; line-height: 1.7; font-size: .9rem; }
+.footer__nap strong { color: #fff; }
+.footer__nap a { color: rgba(255, 255, 255, .85); text-decoration: none; }
+.footer__nap a:hover { color: var(--yellow); }
 .footer p { margin: 0; }
 
 /* ---------- Floating LINE button ---------- */

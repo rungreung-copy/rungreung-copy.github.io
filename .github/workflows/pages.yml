@@ -28,6 +28,8 @@ jobs:
           node-version: 20
       - name: Build works manifest
         run: node scripts/build-works-manifest.mjs
+      - name: Pre-render shop info, prices and JSON-LD into HTML
+        run: node scripts/prerender.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

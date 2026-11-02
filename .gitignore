@@ -2,3 +2,6 @@
 _*.html
 Thumbs.db
 Desktop.ini
+
+# SEO audit artifacts (local only)
+*-audit/
