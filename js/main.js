@@ -377,19 +377,25 @@
   const decksEl = $("#decks");
   decksEl.innerHTML = categories.map((c) => {
     const imgs = manifest[c.id];
-    // รูปจริงอยู่ตรงกลาง ถ้ามีไม่ถึง 3 รูป เติม "กระดาษเปล่า" ไว้ด้านข้างให้ยังเป็นกองการ์ด
-    const photos = imgs.slice(0, MAX_FAN).map((src, i) => ({ src, index: i }));
+    // ใบหน้าสุด (ขวาสุดตอนกาง) = รูปแรก · มีไม่ถึง 3 รูป เติม "กระดาษเปล่า" ไว้ด้านหลัง
+    const photos = imgs.slice(0, MAX_FAN).map((src, i) => ({ src, index: i })).reverse();
     const ghosts = Math.max(0, 3 - photos.length);
-    const slots = [...Array(Math.ceil(ghosts / 2)).fill(null), ...photos, ...Array(Math.floor(ghosts / 2)).fill(null)];
+    const slots = [...Array(ghosts).fill(null), ...photos];
     const n = slots.length;
     const mid = (n - 1) / 2;
-    const spread = n > 1 ? Math.min(13, 36 / (n - 1)) : 0; // องศาระหว่างใบ (หมุนรอบจุดใต้การ์ด → กางเป็นพัด)
+    const stepX = n > 1 ? 92 / (n - 1) : 0; // % ของความกว้างการ์ด
+    const stepR = n > 1 ? 28 / (n - 1) : 0;  // องศา
     const cards = slots.map((slot, i) => {
       const off = i - mid;
-      const style = `--r0:${(off * 2.5).toFixed(1)}deg;--r1:${(off * spread).toFixed(1)}deg;--x1:${(off * 4).toFixed(1)}%;--y1:0%;z-index:${slot ? 10 + n - Math.abs(Math.round(off)) : 1}`;
+      const side = Math.abs(off) / Math.max(mid, 1);
+      const style = [
+        `--sx:${(off * 4).toFixed(1)}px`, `--sy:0px`, `--sr:${(off * 3).toFixed(1)}deg`,
+        `--ox:${(off * stepX).toFixed(1)}%`, `--oy:${off === 0 ? -5 : (side * 5).toFixed(1)}%`, `--or:${(off * stepR).toFixed(1)}deg`,
+        `z-index:${10 + i}`,
+      ].join(";");
       if (!slot) return `<span class="deck__card deck__card--ghost" style="${style}" aria-hidden="true"></span>`;
-      return `<button class="deck__card" type="button" data-index="${slot.index}" style="${style}"
-        aria-label="ดูรูป ${escapeHtml(c.title)} รูปที่ ${slot.index + 1}">
+      return `<button class="deck__card" type="button" data-index="${slot.index}" data-label="${i === n - 1 ? escapeHtml(c.title) : ""}" style="${style}"
+        aria-label="เปิดแกลเลอรี ${escapeHtml(c.title)}">
         <img src="${escapeHtml(slot.src)}" alt="ตัวอย่างงาน${escapeHtml(c.title)} ร้านรุ่งเรือง ก๊อปปี้ รูปที่ ${slot.index + 1}" loading="lazy">
       </button>`;
     }).join("");
@@ -399,23 +405,59 @@
         <div class="deck__info">
           <h3>${escapeHtml(c.title)} <span class="deck__count">${imgs.length} รูป</span></h3>
           ${c.desc ? `<p>${escapeHtml(c.desc)}</p>` : ""}
+          <button class="deck__more" type="button">ดูแกลเลอรี →</button>
         </div>
       </article>`;
   }).join("");
 
-  // แตะบนจอสัมผัส: แตะครั้งแรกกาง แตะรูปอีกครั้งเปิดดู
+  // เมาส์: ชี้แล้วกาง คลิกเปิดแกลเลอรี · จอสัมผัส: แตะครั้งแรกกาง แตะอีกครั้งเปิดแกลเลอรี
   const noHover = window.matchMedia("(hover: none)");
   decksEl.addEventListener("click", (e) => {
     const deck = e.target.closest(".deck");
     if (!deck) return;
-    const card = e.target.closest(".deck__card");
+    if (e.target.closest(".deck__more")) { openGallery(deck.dataset.cat); return; }
+    if (!e.target.closest(".deck__stage")) return;
     if (noHover.matches && !deck.classList.contains("is-open")) {
       $$(".deck.is-open", decksEl).forEach((d) => d.classList.remove("is-open"));
       deck.classList.add("is-open");
       return;
     }
-    if (card) openLightbox(deck.dataset.cat, Number(card.dataset.index));
+    openGallery(deck.dataset.cat);
   });
+
+  // ---- Gallery: รวมทุกรูปของหมวด ----
+  const gal = $("#gallery");
+  const galGrid = $(".gallery__grid", gal);
+  let galCat = null;
+  let galReturnFocus = null;
+  const openGallery = (cat) => {
+    const c = categories.find((x) => x.id === cat);
+    galCat = cat;
+    galReturnFocus = document.activeElement;
+    $("#galleryTitle").textContent = `${c.title} · ${manifest[cat].length} รูป`;
+    $(".gallery__desc", gal).textContent = c.desc || "";
+    galGrid.innerHTML = manifest[cat].map((src, i) => `
+      <button class="gallery__item" type="button" data-index="${i}" style="animation-delay:${Math.min(i, 12) * 45}ms" aria-label="ขยายรูปที่ ${i + 1}">
+        <img src="${escapeHtml(src)}" alt="ตัวอย่างงาน${escapeHtml(c.title)} รูปที่ ${i + 1}" loading="lazy">
+      </button>`).join("");
+    gal.hidden = false;
+    gal.scrollTop = 0;
+    document.body.classList.add("no-scroll");
+    $(".gallery__close", gal).focus();
+  };
+  const closeGallery = () => {
+    gal.hidden = true;
+    galCat = null;
+    document.body.classList.remove("no-scroll");
+    $$(".deck.is-open", decksEl).forEach((d) => d.classList.remove("is-open"));
+    if (galReturnFocus) galReturnFocus.focus();
+  };
+  galGrid.addEventListener("click", (e) => {
+    const item = e.target.closest(".gallery__item");
+    if (item) openLightbox(galCat, Number(item.dataset.index));
+  });
+  $(".gallery__close", gal).addEventListener("click", closeGallery);
+  gal.addEventListener("click", (e) => { if (e.target === gal) closeGallery(); });
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".deck")) $$(".deck.is-open", decksEl).forEach((d) => d.classList.remove("is-open"));
   });
@@ -445,7 +487,7 @@
   };
   const closeLightbox = () => {
     lb.hidden = true;
-    document.body.classList.remove("no-scroll");
+    if (gal.hidden) document.body.classList.remove("no-scroll"); // ยังเปิดแกลเลอรีอยู่ → คงล็อกการเลื่อนไว้
     if (lastFocus) lastFocus.focus();
   };
   const step = (d) => {
@@ -459,7 +501,8 @@
   lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
   document.addEventListener("keydown", (e) => {
     if (lb.hidden) {
-      if (e.key === "Enter" && e.target.matches(".deck")) openLightbox(e.target.dataset.cat, 0);
+      if (!gal.hidden && e.key === "Escape") closeGallery();
+      else if (gal.hidden && e.key === "Enter" && e.target.matches(".deck")) openGallery(e.target.dataset.cat);
       return;
     }
     if (e.key === "Escape") closeLightbox();

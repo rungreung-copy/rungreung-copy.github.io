@@ -34,7 +34,7 @@ body {
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
 }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 a { color: var(--blue); }
 h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em; }
 .container { width: min(1180px, 100% - 40px); margin-inline: auto; }
@@ -69,8 +69,21 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 }
 .nav.is-solid { background: rgba(7, 13, 69, .92); backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, .2); padding: 8px 0; }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.nav__brand { display: flex; align-items: center; }
-.nav__logo { height: 40px; width: auto; border-radius: 8px; box-shadow: 0 0 0 2px rgba(255, 255, 255, .25); }
+.nav__brand { display: flex; align-items: center; text-decoration: none; }
+
+/* ---------- Brand mark (ตัวอักษรชื่อร้าน — แทนรูปโลโก้) ---------- */
+.brandmark { display: inline-flex; align-items: center; gap: 10px; color: #fff; }
+.brandmark__icon {
+  width: 40px; height: 40px; flex: none; display: grid; place-items: center;
+  border-radius: 11px; background: var(--blue); color: var(--yellow);
+  font: 600 1.6rem/1 var(--font-body); padding-bottom: 3px; /* Sarabun มีหัว ร จะไม่ดูเหมือนตัว S */
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .25), 0 4px 12px rgba(0, 0, 0, .25);
+}
+.brandmark__text { font: 700 1.35rem/1.45 var(--font-head); letter-spacing: .01em; white-space: nowrap; }
+.brandmark__text small { font-size: .72em; font-weight: 500; opacity: .8; margin-right: 2px; }
+.brandmark__text em { font-style: normal; color: var(--yellow); }
+.brandmark--footer .brandmark__icon { width: 52px; height: 52px; font-size: 2rem; }
+.brandmark--footer .brandmark__text { font-size: 1.6rem; }
 .nav__links { display: flex; align-items: center; gap: 4px; }
 .nav__links a {
   color: rgba(255, 255, 255, .85); text-decoration: none;
@@ -148,12 +161,56 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 }
 .hero__badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 4px rgba(6, 199, 85, .25); animation: pulse 2s infinite; }
 .hero__title {
-  font-size: clamp(2rem, 4.6vw, 3.6rem);
   font-weight: 700;
-  margin: .5em 0 .4em;
+  margin: .45em 0 .5em;
   animation: rise .8s .1s ease both;
 }
 .hero__title .nw { white-space: nowrap; }
+
+/* ---------- Wordmark: "ร้านรุ่งเรือง ก๊อปปี้" ตัวอักษรใหญ่แบบ 3 มิติ ---------- */
+.wordmark {
+  display: inline-grid; grid-template-columns: auto auto; align-items: end;
+  column-gap: .18em; line-height: 1.5; margin-bottom: .1em;
+  font-size: clamp(3.1rem, 8.4vw, 6.4rem);
+}
+.wordmark__pre {
+  grid-column: 1 / -1; justify-self: start;
+  font: 600 .3em/1.4 var(--font-head); letter-spacing: .08em;
+  color: rgba(255, 255, 255, .85);
+  padding: .05em .7em .12em; margin-bottom: -.25em; margin-left: .15em;
+  border: 2px solid rgba(255, 207, 51, .6); border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+}
+.wordmark__main {
+  position: relative; font-weight: 900; color: var(--yellow);
+  padding: .02em .02em .08em;
+  text-shadow:
+    0 .02em 0 #f2b400, 0 .04em 0 #e3a300, 0 .06em 0 #cf9100, 0 .08em 0 #b97e00,
+    0 .1em 0 #1a2390, 0 .13em .04em rgba(0, 0, 0, .45), 0 0 .5em rgba(255, 207, 51, .25);
+  animation: wordmark-pop .9s .15s cubic-bezier(.3, 1.5, .5, 1) both;
+}
+.wordmark__main::after { /* แสงวิ่งผ่านตัวอักษร */
+  content: attr(data-text); position: absolute; inset: 0; padding: inherit;
+  color: transparent; text-shadow: none; pointer-events: none;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, .85) 50%, transparent 60%) no-repeat;
+  background-size: 250% 100%; background-position: 150% 0;
+  -webkit-background-clip: text; background-clip: text;
+  animation: shine 4.5s 1.2s ease-in-out infinite;
+}
+.wordmark__tag {
+  align-self: center; margin-bottom: .15em;
+  font: 800 .42em/1.4 var(--font-head); color: var(--navy-900);
+  background: #fff; padding: .02em .45em .12em; border-radius: .3em;
+  transform: rotate(-6deg);
+  box-shadow: .07em .09em 0 var(--yellow-deep), 0 .2em .5em rgba(0, 0, 0, .3);
+  animation: tag-drop .7s .6s cubic-bezier(.3, 1.6, .5, 1) both;
+}
+.hero__tagline {
+  display: block; font: 700 clamp(1.35rem, 2.6vw, 2.1rem)/1.45 var(--font-head); color: #fff;
+}
+@keyframes wordmark-pop { from { opacity: 0; transform: translateY(.3em) scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes tag-drop { from { opacity: 0; transform: translateY(-.8em) rotate(-20deg); } to { opacity: 1; transform: rotate(-6deg); } }
+@keyframes shine { 0%, 55% { background-position: 150% 0; } 100% { background-position: -50% 0; } }
 .hero__title .hl {
   color: var(--yellow);
   position: relative;
@@ -192,7 +249,16 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
   transition: transform .5s cubic-bezier(.2, .8, .2, 1);
 }
 .stack__card img, .stack__sign img { border-radius: 10px; width: 100%; height: 100%; object-fit: cover; }
-.stack__sign { width: 300px; top: 0; left: 4%; transform: rotate(-5deg); z-index: 4; padding: 8px; }
+.stack__sign { width: 320px; top: 0; left: 2%; transform: rotate(-5deg); z-index: 4; padding: 8px; }
+
+/* ป้ายร้านทำด้วยตัวอักษรจริง (แทนรูปป้ายที่สระหาย) */
+.sign { font-family: var(--font-head); text-align: center; color: var(--blue); }
+.sign__top { background: linear-gradient(180deg, #2333c8, #1a25a8); border-radius: 8px 8px 0 0; padding: 6px 10px 6px; }
+.sign__name { display: block; font: 800 2.05rem/1.45 var(--font-head); color: #fff; text-shadow: 0 2px 0 #0b1460; white-space: nowrap; }
+.sign__tel { display: block; font: 500 .66rem/1.5 var(--font-head); color: #fff; border-top: 1.5px solid rgba(255, 255, 255, .7); padding-top: 3px; white-space: nowrap; }
+.sign__body { padding: 6px 8px 10px; border: 2px solid #1a25a8; border-top: 0; border-radius: 0 0 8px 8px; }
+.sign__body strong { display: block; font: 800 1.7rem/1.45 var(--font-head); color: #1a25a8; }
+.sign__body span { display: block; font: 600 .86rem/1.55 var(--font-head); color: #1a25a8; white-space: nowrap; }
 .stack__card--back { width: 260px; height: 230px; top: 70px; right: 0; transform: rotate(8deg); z-index: 1; }
 .stack__card--mid { width: 270px; height: 240px; top: 200px; left: 0; transform: rotate(-7deg); z-index: 2; }
 .stack__card--front { width: 270px; height: 250px; bottom: 0; right: 8%; transform: rotate(4deg); z-index: 3; }
@@ -379,16 +445,23 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 .decks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 20px; }
 .deck { outline: none; border-radius: var(--radius); }
 .deck:focus-visible { box-shadow: 0 0 0 3px rgba(31, 47, 192, .35); }
-.deck__stage { position: relative; height: 215px; }
+/* การ์ดซ้อนแนวตั้ง → ชี้/แตะแล้วกางออกเป็นพัด (ซ้ายเอียงซ้าย กลางยกขึ้น ขวาเอียงขวา) แบบคลิปตัวอย่าง */
+.deck__stage { position: relative; height: 250px; cursor: pointer; }
 .deck__card {
-  position: absolute; left: 50%; bottom: 14px;
-  width: 60%; aspect-ratio: 4 / 3.3; margin-left: -30%;
-  padding: 0; border: 6px solid #fff; border-radius: 14px; overflow: hidden; cursor: zoom-in;
-  background: #ddd; box-shadow: 0 10px 26px rgba(7, 13, 69, .22);
-  transform-origin: 50% 240%;
-  transform: rotate(var(--r0));
-  transition: transform .55s cubic-bezier(.2, .9, .25, 1.15), box-shadow .3s;
+  position: absolute; left: 50%; top: 22px;
+  width: 44%; aspect-ratio: 3 / 4; margin-left: -22%;
+  padding: 0; border: 0; border-radius: 16px; overflow: hidden; cursor: zoom-in;
+  background: #ddd; box-shadow: 0 12px 28px rgba(7, 13, 69, .28), inset 0 0 0 1px rgba(255, 255, 255, .25);
+  transform-origin: 50% 100%;
+  transform: translate(var(--sx), var(--sy)) rotate(var(--sr));
+  transition: transform .6s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s;
 }
+.deck__card::after { /* เงาไล่ด้านล่าง + ชื่อหมวดมุมซ้ายล่าง เหมือนการ์ดในคลิป */
+  content: attr(data-label); position: absolute; inset: auto 0 0; padding: 26px 10px 8px;
+  background: linear-gradient(transparent, rgba(7, 13, 69, .7));
+  color: #fff; font: 600 .78rem/1.3 var(--font-head); text-align: left;
+}
+.deck__card--ghost::after { content: none; }
 .deck__card img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
 .deck__card--ghost {
   cursor: default; pointer-events: none; border-width: 0;
@@ -398,14 +471,49 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
   box-shadow: 0 8px 20px rgba(7, 13, 69, .14);
 }
 .deck:hover .deck__card, .deck:focus-within .deck__card, .deck.is-open .deck__card {
-  transform: translate(var(--x1), var(--y1)) rotate(var(--r1));
+  transform: translate(var(--ox), var(--oy)) rotate(var(--or));
 }
 .deck:hover .deck__card:hover, .deck.is-open .deck__card:focus-visible, .deck__card:focus-visible {
-  transform: translate(var(--x1), calc(var(--y1) - 14px)) rotate(var(--r1)) scale(1.07);
-  box-shadow: 0 18px 40px rgba(7, 13, 69, .35);
+  transform: translate(var(--ox), calc(var(--oy) - 12px)) rotate(var(--or)) scale(1.06);
+  box-shadow: 0 20px 44px rgba(7, 13, 69, .4);
   z-index: 20 !important;
 }
 .deck__info { text-align: center; padding: 0 8px; }
+.deck__more {
+  margin-top: 10px; border: 0; cursor: pointer;
+  padding: .45em 1.1em; border-radius: 999px; background: var(--blue-soft); color: var(--blue);
+  font: 600 .9rem var(--font-head); transition: background .2s, transform .2s;
+}
+.deck__more:hover { background: #dbe1ff; transform: translateY(-2px); }
+
+/* ---------- Gallery (รวมรูปทั้งหมดของหมวด) ---------- */
+.gallery {
+  position: fixed; inset: 0; z-index: 90; overflow-y: auto; overscroll-behavior: contain;
+  background: rgba(5, 9, 40, .82); backdrop-filter: blur(8px);
+  padding: 32px 20px; animation: fade .25s ease;
+}
+.gallery[hidden] { display: none; }
+.gallery__panel {
+  width: min(1100px, 100%); margin: 0 auto; background: #fff; border-radius: 24px;
+  padding: 26px 28px 30px; box-shadow: 0 30px 80px rgba(0, 0, 0, .45);
+  animation: rise .35s ease;
+}
+.gallery__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.gallery__head h3 { font-size: 1.6rem; margin: 0; }
+.gallery__desc { margin: 2px 0 0; color: var(--muted); }
+.gallery__close {
+  width: 44px; height: 44px; flex: none; border: 0; border-radius: 50%; cursor: pointer;
+  background: var(--tint); color: var(--navy-800); font-size: 1.1rem;
+}
+.gallery__close:hover { background: var(--blue-soft); }
+.gallery__grid { columns: 3 240px; column-gap: 14px; }
+.gallery__item {
+  display: block; width: 100%; margin: 0 0 14px; padding: 0; border: 0; cursor: zoom-in;
+  break-inside: avoid; border-radius: 14px; overflow: hidden; background: #eef0f8;
+  box-shadow: var(--shadow-sm); opacity: 0; animation: rise .45s ease forwards;
+}
+.gallery__item img { width: 100%; transition: transform .4s ease; }
+.gallery__item:hover img, .gallery__item:focus-visible img { transform: scale(1.04); }
 .deck__info h3 { font-size: 1.15rem; margin-bottom: .15em; }
 .deck__count { display: inline-block; margin-left: 6px; padding: .1em .6em; border-radius: 999px; background: var(--yellow); color: var(--navy-900); font-size: .78rem; vertical-align: middle; }
 .deck__info p { margin: 0; font-size: .92rem; color: var(--muted); }
@@ -482,7 +590,6 @@ a.ccard:hover { background: rgba(255, 255, 255, .13); transform: translateX(4px)
 /* ---------- Footer ---------- */
 .footer { background: var(--navy-900); color: rgba(255, 255, 255, .6); padding: 28px 0; font-size: .92rem; }
 .footer__inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-.footer__logo { height: 64px; width: auto; border-radius: 8px; }
 .footer__nap { font-style: normal; line-height: 1.7; font-size: .9rem; }
 .footer__nap strong { color: #fff; }
 .footer__nap a { color: rgba(255, 255, 255, .85); text-decoration: none; }
@@ -555,8 +662,15 @@ a.ccard:hover { background: rgba(255, 255, 255, .13); transform: translateX(4px)
   .section { padding: 72px 0; }
   .services { grid-template-columns: 1fr; }
   .decks { grid-template-columns: 1fr; }
-  .deck__stage { height: 250px; }
-  .deck__card { width: 58%; margin-left: -29%; }
+  .deck__stage { height: 260px; }
+  .deck__card { width: 40%; margin-left: -20%; }
+  .gallery { padding: 12px 10px; }
+  .gallery__panel { padding: 18px 16px 20px; border-radius: 18px; }
+  .gallery__grid { columns: 2 140px; column-gap: 10px; }
+  .gallery__item { margin-bottom: 10px; }
+  .wordmark { font-size: clamp(3.2rem, 19vw, 4.6rem); grid-template-columns: auto; justify-items: center; }
+  .wordmark__pre { justify-self: center; margin-left: 0; }
+  .wordmark__tag { justify-self: end; margin: -.55em -.1em .1em 0; font-size: .4em; }
   .job { padding: 14px; }
   .job__grid { grid-template-columns: 1fr 1fr; }
   .job__print { grid-column: 1 / -1; }
@@ -567,7 +681,11 @@ a.ccard:hover { background: rgba(255, 255, 255, .13); transform: translateX(4px)
   .hero { padding-top: 100px; }
   .hero__visual { height: 380px; transform: scale(.82); transform-origin: top center; margin-bottom: -60px; }
   .hero__scroll { display: none; }
-  .stack__sign { width: 250px; }
+  .stack__sign { width: 272px; }
+  .sign__name { font-size: 1.72rem; }
+  .sign__tel { font-size: .56rem; }
+  .sign__body strong { font-size: 1.45rem; }
+  .sign__body span { font-size: .74rem; }
   .calc { padding: 18px; }
   .calc__sum { font-size: 1.8rem; }
   .portfolio-info { padding: 24px; }

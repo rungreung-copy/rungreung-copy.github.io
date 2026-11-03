@@ -25,7 +25,6 @@
   <meta name="theme-color" content="#0b1460">
   <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-  <link rel="preload" as="image" href="images/crops/logo.webp" fetchpriority="high">
   <!-- prerender:jsonld -->
   <script type="application/ld+json">
 {
@@ -38,9 +37,9 @@
   "url": "https://rungreung-copy.github.io/",
   "image": [
     "https://rungreung-copy.github.io/images/og.jpg",
-    "https://rungreung-copy.github.io/images/crops/logo.webp"
+    "https://rungreung-copy.github.io/images/brand/logo.png"
   ],
-  "logo": "https://rungreung-copy.github.io/images/crops/logo.webp",
+  "logo": "https://rungreung-copy.github.io/images/brand/logo.png",
   "telephone": "+66844465589",
   "faxNumber": "+6675290766",
   "email": "pensirikongsuk@gmail.com",
@@ -146,7 +145,7 @@
   <!-- /prerender:jsonld -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800;900&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -155,7 +154,10 @@
   <header class="nav" id="nav">
     <div class="container nav__inner">
       <a href="#top" class="nav__brand" aria-label="หน้าแรก">
-        <img class="nav__logo" src="images/crops/logo-title.webp" width="400" height="91" alt="ร้านรุ่งเรือง ก๊อปปี้">
+        <span class="brandmark" aria-label="ร้านรุ่งเรือง ก๊อปปี้">
+          <span class="brandmark__icon" aria-hidden="true">ร</span>
+          <span class="brandmark__text" aria-hidden="true"><small>ร้าน</small>รุ่งเรือง <em>ก๊อปปี้</em></span>
+        </span>
       </a>
       <button class="nav__toggle" id="navToggle" aria-label="เปิดเมนู" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -187,8 +189,15 @@
       <div class="hero__content">
         <span class="hero__badge"><span class="dot"></span> ร้านถ่ายเอกสาร จังหวัดตรัง</span>
         <h1 class="hero__title">
-          <span class="nw">ถ่ายเอกสาร</span> <span class="nw">ปริ้นท์</span> <span class="nw">เข้าเล่ม</span><br>
-          <span class="hl"><span class="nw">ครบ จบ</span> <span class="nw">ในร้านเดียว</span></span>
+          <span class="wordmark">
+            <span class="wordmark__pre">ร้าน</span>
+            <span class="wordmark__main" data-text="รุ่งเรือง">รุ่งเรือง</span>
+            <span class="wordmark__tag">ก๊อปปี้</span>
+          </span>
+          <span class="hero__tagline">
+            <span class="nw">ถ่ายเอกสาร</span> <span class="nw">ปริ้นท์</span> <span class="nw">เข้าเล่ม</span>
+            <span class="hl"><span class="nw">ครบ จบ</span> <span class="nw">ในร้านเดียว</span></span>
+          </span>
         </h1>
         <p class="hero__lead">
           ส่งไฟล์มาทาง LINE แล้วแวะมารับได้เลย ร้านรุ่งเรือง ก๊อปปี้ทำให้ทั้งงานด่วน
@@ -214,7 +223,17 @@
 
       <div class="hero__visual" aria-hidden="true">
         <div class="stack">
-          <figure class="stack__sign"><img src="images/crops/logo.webp" width="600" height="415" fetchpriority="high" alt=""></figure>
+          <figure class="stack__sign sign">
+            <div class="sign__top">
+              <span class="sign__name">ร้านรุ่งเรือง ก๊อปปี้</span>
+              <span class="sign__tel">โทร. 084-446-5589, 083-595-6493 · แฟกซ์ 075-290-766</span>
+            </div>
+            <div class="sign__body">
+              <strong>ถ่ายเอกสาร</strong>
+              <span>• พรินต์เอกสาร • เข้าเล่ม • เคลือบบัตร</span>
+              <span>• แฟกซ์ • จำหน่ายอุปกรณ์เครื่องเขียน</span>
+            </div>
+          </figure>
           <figure class="stack__card stack__card--back"><img src="images/crops/work-2.webp" width="312" height="276" alt=""></figure>
           <figure class="stack__card stack__card--mid"><img src="images/crops/work-3.webp" width="312" height="290" alt=""></figure>
           <figure class="stack__card stack__card--front"><img src="images/crops/work-4.webp" width="312" height="290" alt=""></figure>
@@ -266,7 +285,7 @@
         <div class="section__head reveal">
           <span class="eyebrow">อัตราค่าบริการ</span>
           <h2>ราคาชัดเจน ไม่มีบวกเพิ่ม</h2>
-          <p>ราคาตามป้ายหน้าร้าน <a href="images/price-rates/เรทราคา.jpg" target="_blank" rel="noopener">ดูรูปป้ายราคาจริง ↗</a></p>
+          <p>ราคาตามป้ายหน้าร้าน ถ่ายเอกสาร A4 เริ่มต้นหน้าละ 0.40 บาท</p>
         </div>
         <div class="prices" id="priceBoard"><!-- prerender:prices -->
           <article class="pcard tone-slate reveal">
@@ -381,7 +400,7 @@
         <div class="section__head reveal">
           <span class="eyebrow">ตัวอย่างงาน</span>
           <h2>ผลงานจากร้านเรา</h2>
-          <p>งานจริงที่ลูกค้าไว้ใจให้ทางร้านทำ · ชี้หรือแตะที่กองรูปเพื่อกางดู คลิกรูปเพื่อดูภาพใหญ่</p>
+          <p>งานจริงที่ลูกค้าไว้ใจให้ทางร้านทำ · ชี้หรือแตะที่กองรูปเพื่อกางดู คลิกเพื่อเปิดแกลเลอรีของแต่ละหมวด</p>
         </div>
         <div class="decks" id="decks"></div>
 
@@ -478,7 +497,10 @@
 
   <footer class="footer">
     <div class="container footer__inner">
-      <img src="images/crops/logo.webp" width="600" height="415" alt="โลโก้ร้านรุ่งเรือง ก๊อปปี้" class="footer__logo" loading="lazy">
+      <span class="brandmark brandmark--footer" aria-hidden="true">
+        <span class="brandmark__icon">ร</span>
+        <span class="brandmark__text"><small>ร้าน</small>รุ่งเรือง <em>ก๊อปปี้</em></span>
+      </span>
       <address class="footer__nap"><!-- prerender:nap --><strong>ร้านรุ่งเรือง ก๊อปปี้</strong><br>จ.ตรัง<br>โทร <a href="tel:0844465589">084-446-5589</a>, <a href="tel:0835956493">083-595-6493</a> · แฟกซ์ 075-290-766<br>LINE: <a href="https://line.me/ti/p/~rungreung2549" target="_blank" rel="noopener">rungreung2549</a> · <a href="mailto:pensirikongsuk@gmail.com">pensirikongsuk@gmail.com</a><!-- /prerender:nap --></address>
       <p>© <span id="year">2569</span> ร้านรุ่งเรือง ก๊อปปี้ จังหวัดตรัง · ขอบคุณทุกท่านที่มาอุดหนุนค่ะ/ครับ 🙏</p>
     </div>
@@ -487,6 +509,20 @@
   <a class="fab-line" data-line-link href="https://line.me/ti/p/~rungreung2549" aria-label="ส่งงานทาง LINE" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5 1.1-.5 6-3.5 8.2-6.1C21.6 14.1 22 12.6 22 11c0-4.4-4.5-8-10-8Z"/></svg>
   </a>
+
+  <!-- แกลเลอรีผลงาน (รวมทุกรูปของหมวด) -->
+  <div class="gallery" id="gallery" hidden role="dialog" aria-modal="true" aria-labelledby="galleryTitle">
+    <div class="gallery__panel">
+      <header class="gallery__head">
+        <div>
+          <h3 id="galleryTitle"></h3>
+          <p class="gallery__desc"></p>
+        </div>
+        <button class="gallery__close" type="button" aria-label="ปิดแกลเลอรี">✕</button>
+      </header>
+      <div class="gallery__grid"></div>
+    </div>
+  </div>
 
   <!-- Lightbox ดูรูปผลงาน -->
   <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="ดูรูปผลงาน">
