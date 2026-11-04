@@ -50,7 +50,9 @@ const shopText = {
   phone0: SHOP.phones[0],
   fax: SHOP.fax,
   facebookName: SHOP.facebookName,
-  hoursLine: [addressLine && `📍 ${addressLine}`, SHOP.hours && `🕘 เวลาเปิดร้าน: ${SHOP.hours}`].filter(Boolean).join(" · ") || `${SHOP.name} ${SHOP.province}`,
+  addressLine,
+  hoursText: SHOP.hours,
+  hoursLine: `ร้าน${SHOP.name} ${SHOP.province}`,
 };
 html = html.replace(/(<(\w+)\b[^>]*\bdata-shop="(\w+)"[^>]*>)[^<]*(<\/\2>)/g,
   (m, open, tag, key, close) => (key in shopText ? `${open}${esc(shopText[key])}${close}` : m));
@@ -62,6 +64,7 @@ setAttrOnTags(/<a\b[^>]*\bid="fbLink"[^>]*>/g, { href: SHOP.facebookUrl });
 const q = encodeURIComponent(SHOP.geo ? `${SHOP.geo.lat},${SHOP.geo.lng}` : SHOP.mapQuery);
 setAttrOnTags(/<iframe\b[^>]*\bid="mapFrame"[^>]*>/g, { src: `https://maps.google.com/maps?q=${q}&z=16&output=embed` });
 setAttrOnTags(/<a\b[^>]*\bid="mapLink"[^>]*>/g, { href: `https://www.google.com/maps/search/?api=1&query=${q}` });
+setAttrOnTags(/<a\b[^>]*\bid="addressCard"[^>]*>/g, { href: `https://www.google.com/maps/search/?api=1&query=${q}` });
 fillId("phoneLinks", SHOP.phones.map((p) => `<a href="tel:${tel(p)}">${esc(p)}</a>`).join(", "));
 fillId("emailLinks", SHOP.emails.map((e) => `<a href="mailto:${esc(e)}">${esc(e)}</a>`).join("<br>"));
 fillId("year", String(new Date().getFullYear() + 543));

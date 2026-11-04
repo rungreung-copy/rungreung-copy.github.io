@@ -20,9 +20,9 @@
     phone0: SHOP.phones[0],
     fax: SHOP.fax,
     facebookName: SHOP.facebookName,
-    hoursLine: SHOP.hours ? `เวลาเปิดร้าน: ${SHOP.hours}` : `${SHOP.name} ${SHOP.province}`,
   };
-  $$("[data-shop]").forEach((el) => { el.textContent = shopText[el.dataset.shop] ?? ""; });
+  // ช่องอื่น (ที่อยู่ เวลาเปิด) ถูกเขียนลง HTML โดย scripts/prerender.mjs แล้ว
+  $$("[data-shop]").forEach((el) => { if (el.dataset.shop in shopText) el.textContent = shopText[el.dataset.shop]; });
   $$("[data-line-link]").forEach((a) => { a.href = SHOP.lineUrl; a.target = "_blank"; a.rel = "noopener"; });
   $$("[data-phone-link]").forEach((a) => { a.href = `tel:${SHOP.phones[0].replace(/-/g, "")}`; });
   $("#phoneLinks").innerHTML = SHOP.phones
