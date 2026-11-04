@@ -380,6 +380,12 @@
   const PF_FIELDS = [".p-cover", ".p-cover-qty", ".p-inner", ".p-inner-qty", ".p-bind", ".p-clear", ".p-sets"];
   const pfHtml = () => `
     <div class="pf">
+      <label class="pf__file">
+        <input type="file" class="p-file sr-only" multiple accept=".pdf,application/pdf,image/*">
+        <span class="pf__file-title">📂 เลือกไฟล์ Portfolio เพื่อนับหน้า</span>
+        <small>PDF หรือรูปภาพ · ไฟล์ไม่ถูกส่งออกจากเครื่องของคุณ</small>
+      </label>
+      <p class="pf__status p-status" role="status" aria-live="polite"></p>
       <fieldset class="pf__group">
         <legend>ปก</legend>
         <label>กระดาษ<select class="p-cover">${pricedOptions(PORTFOLIO.covers)}</select></label>
@@ -420,6 +426,77 @@
     return { sub: perBook * sets, starting: !!bind.startingAt };
   };
 
+  // นับหน้าไฟล์ Portfolio: ไฟล์ส่วนใหญ่รวมปกไว้แล้ว จึงหักหน้าปกออกก่อนเติมช่องเนื้อใน
+  const pfApplyTotal = (root) => {
+    const total = Number(root.dataset.pfTotal);
+    const cover = toInt($(".p-cover-qty", root).value);
+    const inner = Math.max(0, total - cover);
+    $(".p-inner-qty", root).value = inner;
+    $(".p-status", root).textContent = `ไฟล์ทั้งหมด ${total} หน้า = ปก ${Math.min(cover, total)} + เนื้อใน ${inner} หน้า (แก้ตัวเลขได้)`;
+    $(".p-inner", root).dispatchEvent(new Event("input", { bubbles: true })); // ให้ราคาคำนวณใหม่
+  };
+  const pfCountFiles = async (root, fileList) => {
+    const files = [...fileList];
+    if (!files.length) return;
+    const status = $(".p-status", root);
+    status.classList.remove("is-warn");
+    status.textContent = "⏳ กำลังนับจำนวนหน้า…";
+    let total = 0;
+    const problems = [];
+    for (const f of files) {
+      if (isPdf(f)) {
+        try {
+          const pdfjs = await loadPdfjs();
+          const doc = await pdfjs.getDocument({ data: await f.arrayBuffer() }).promise;
+          total += doc.numPages;
+          doc.destroy();
+        } catch (err) {
+          problems.push(`${f.name}: ${err && err.name === "PasswordException" ? "ไฟล์ติดรหัสผ่าน" : "อ่านไฟล์ไม่ได้"}`);
+        }
+      } else if (isImage(f)) {
+        total += 1;
+      } else {
+        problems.push(`${f.name}: ${/\.(docx?|odt|rtf)$/i.test(f.name) ? "กรุณา Save เป็น PDF ก่อน" : "รองรับเฉพาะ PDF และรูปภาพ"}`);
+      }
+    }
+    if (total > 0) {
+      root.dataset.pfTotal = total;
+      pfApplyTotal(root);
+    } else {
+      delete root.dataset.pfTotal;
+      status.textContent = "";
+    }
+    if (problems.length) {
+      status.classList.add("is-warn");
+      status.textContent = [status.textContent, ...problems.map((p) => `⚠️ ${p}`)].filter(Boolean).join(" ");
+    }
+  };
+  document.addEventListener("change", (e) => {
+    if (!e.target.matches(".p-file")) return;
+    pfCountFiles(e.target.closest(".pf").parentElement, e.target.files);
+    e.target.value = "";
+  });
+  document.addEventListener("input", (e) => {
+    const pf = e.target.closest(".pf");
+    if (!pf) return;
+    const root = pf.parentElement;
+    if (e.target.matches(".p-cover-qty") && root.dataset.pfTotal) pfApplyTotal(root);
+    if (e.target.matches(".p-inner-qty")) { // ลูกค้าแก้เอง: เลิกคำนวณอัตโนมัติ
+      delete root.dataset.pfTotal;
+      $(".p-status", root).textContent = "";
+    }
+  });
+  document.addEventListener("dragover", (e) => {
+    const zone = e.target.closest && e.target.closest(".pf__file");
+    $$(".pf__file.is-over").forEach((z) => { if (z !== zone) z.classList.remove("is-over"); });
+    if (zone) zone.classList.add("is-over");
+  });
+  document.addEventListener("drop", (e) => {
+    const zone = e.target.closest && e.target.closest(".pf__file");
+    $$(".pf__file.is-over").forEach((z) => z.classList.remove("is-over"));
+    if (zone) pfCountFiles(zone.closest(".pf").parentElement, e.dataTransfer.files);
+  });
+
   const addPortfolio = (from) => {
     const el = document.createElement("article");
     el.className = "job pf-card";
@@ -431,7 +508,11 @@
       </header>
       ${pfHtml()}
       <footer class="job__foot">รวมรายการนี้ <strong class="j-sub">0 บาท</strong></footer>`;
-    if (from) PF_FIELDS.forEach((sel) => { $(sel, el).value = $(sel, from).value; });
+    if (from) {
+      PF_FIELDS.forEach((sel) => { $(sel, el).value = $(sel, from).value; });
+      $(".p-status", el).textContent = $(".p-status", from).textContent;
+      if (from.dataset.pfTotal) el.dataset.pfTotal = from.dataset.pfTotal;
+    }
     el.addEventListener("input", recalc);
     el.addEventListener("change", recalc);
     $(".job__del", el).addEventListener("click", () => { el.remove(); recalc(); });
@@ -556,6 +637,7 @@
     svcConf = conf;
     svcReturnFocus = document.activeElement;
     $("#svcTitle").textContent = conf.title;
+    delete svcBody.dataset.pfTotal;
     if (conf.portfolio) {
       svcBody.innerHTML = pfHtml();
     } else {

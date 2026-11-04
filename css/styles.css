@@ -463,6 +463,17 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 
 /* พอร์ตโฟลิโอ */
 .pf { display: grid; gap: 10px; }
+.pf label.pf__file {
+  align-items: center; gap: 2px; padding: 12px; text-align: center; cursor: pointer;
+  border: 2px dashed #b9c2ef; border-radius: 12px; background: var(--tint);
+  transition: border-color .2s, background .2s;
+}
+.pf label.pf__file:hover, .pf label.pf__file:focus-within, .pf label.pf__file.is-over { border-color: var(--blue); background: var(--blue-soft); }
+.pf__file-title { font: 600 .98rem var(--font-head); color: var(--navy-800); }
+.pf__file small { font-size: .8rem; color: var(--muted); }
+.pf__status { margin: 0; font-size: .88rem; font-weight: 600; color: #1d7a46; }
+.pf__status.is-warn { color: #b45309; }
+.pf__status:empty { display: none; }
 .pf__group { display: grid; grid-template-columns: minmax(0, 1fr) 120px; gap: 10px; margin: 0; padding: 8px 12px 12px; border: 1.5px solid #dfe3f6; border-radius: 12px; }
 .pf__group:nth-of-type(3) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .pf__group legend { padding: 0 6px; font: 600 .95rem var(--font-head); color: var(--navy-800); }
