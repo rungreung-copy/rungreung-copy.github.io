@@ -743,6 +743,7 @@ a.ccard:hover { background: rgba(255, 255, 255, .13); transform: translateX(4px)
   .pgrow { grid-template-columns: 14px minmax(0, 1fr) 80px 30px; row-gap: 2px; }
   .pgrow__calc { grid-column: 1 / -1; }
   .pgrow__calc:empty { display: none; }
+  .pf__group, .pf__group:nth-of-type(3) { grid-template-columns: minmax(0, 1fr); }
   .job__print { grid-column: 1 / -1; }
   .job__addons { grid-template-columns: 1fr; }
   .drop { padding: 26px 14px; }
