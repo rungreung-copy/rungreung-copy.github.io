@@ -580,6 +580,7 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 a.ccard:hover { background: rgba(255, 255, 255, .13); transform: translateX(4px); }
 .ccard span { display: block; font-size: .85rem; opacity: .7; }
 .ccard strong { font: 500 1.08rem var(--font-head); word-break: break-word; }
+.ccard__note { display: block; margin-top: 2px; font-size: .85rem; opacity: .7; }
 .ccard strong a { color: #fff; text-decoration: none; }
 .ccard strong a:hover { color: var(--yellow); }
 .ccard__icon { width: 48px; height: 48px; flex: none; display: grid; place-items: center; font-size: 1.4rem; border-radius: 12px; background: rgba(255, 255, 255, .1); }

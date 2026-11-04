@@ -14,7 +14,8 @@ const SHOP = {
   // TODO: เปลี่ยนเป็นลิงก์เพจ Facebook จริงของร้าน
   facebookUrl: "https://www.facebook.com/search/top?q=" + encodeURIComponent("ร้านรุ่งเรือง ก๊อปปี้จังหวัดตรัง"),
   mapQuery: "145/1 ถ.วิเศษกุล ต.ทับเที่ยง อ.เมือง จ.ตรัง 92000",
-  hours: "07.00–19.00 น.",
+  hours: "จันทร์–เสาร์ 07.00–19.00 น. (หยุดวันอาทิตย์)",
+  hoursNote: "วันหยุดพิเศษ แจ้งทางเพจ Facebook ของร้าน",
   // ที่อยู่ร้าน — ใช้ทั้งบนหน้าเว็บและข้อมูลสำหรับ Google
   address: {
     street: "145/1 ถ.วิเศษกุล",
@@ -23,9 +24,8 @@ const SHOP = {
     province: "ตรัง",
     postalCode: "92000",
   },
-  // TODO: เวลาเปิด-ปิดแบบละเอียด สำหรับ Google เช่น
-  // [{ days: ["Mo","Tu","We","Th","Fr","Sa"], opens: "08:00", closes: "18:00" }]
-  openingHours: [],
+  // เวลาเปิด-ปิดแบบละเอียด สำหรับ Google
+  openingHours: [{ days: ["Mo", "Tu", "We", "Th", "Fr", "Sa"], opens: "07:00", closes: "19:00" }],
   // TODO: พิกัดร้าน (คลิกขวาที่หมุดใน Google Maps แล้วคัดลอกตัวเลข) เช่น { lat: 7.5563, lng: 99.6114 }
   geo: null,
   siteUrl: "https://rungreung-copy.github.io/",

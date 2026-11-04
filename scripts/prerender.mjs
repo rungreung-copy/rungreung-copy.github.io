@@ -52,6 +52,7 @@ const shopText = {
   facebookName: SHOP.facebookName,
   addressLine,
   hoursText: SHOP.hours,
+  hoursNote: SHOP.hoursNote || "",
   hoursLine: `ร้าน${SHOP.name} ${SHOP.province}`,
 };
 html = html.replace(/(<(\w+)\b[^>]*\bdata-shop="(\w+)"[^>]*>)[^<]*(<\/\2>)/g,
