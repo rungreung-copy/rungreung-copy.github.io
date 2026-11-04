@@ -442,7 +442,7 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 .calc__send { flex: none; }
 
 /* ---------- Works: Fan-Out decks ---------- */
-.decks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
+.decks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 24px; }
 #works { overflow-x: clip; }
 .deck { outline: none; border-radius: var(--radius); }
 .deck:focus-visible { box-shadow: 0 0 0 3px rgba(31, 47, 192, .35); }
@@ -679,7 +679,7 @@ a.ccard:hover { background: rgba(255, 255, 255, .13); transform: translateX(4px)
   .lightbox { padding: 12px; gap: 4px; }
   .lightbox__nav { width: 40px; height: 40px; font-size: 1.6rem; }
   .hero { padding-top: 100px; }
-  .hero__visual { height: 380px; transform: scale(.82); transform-origin: top center; margin-bottom: -60px; }
+  .hero__visual { height: 500px; transform: scale(.82); transform-origin: top center; margin-bottom: -90px; }
   .hero__scroll { display: none; }
   .stack__sign { width: 272px; }
   .sign__name { font-size: 1.72rem; }
