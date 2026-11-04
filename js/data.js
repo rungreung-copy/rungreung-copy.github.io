@@ -11,8 +11,7 @@ const SHOP = {
   fax: "075-290-766",
   emails: ["pensirikongsuk@gmail.com", "pen_1006@hotmail.com"],
   facebookName: "ร้านรุ่งเรือง ก๊อปปี้จังหวัดตรัง",
-  // TODO: เปลี่ยนเป็นลิงก์เพจ Facebook จริงของร้าน
-  facebookUrl: "https://www.facebook.com/search/top?q=" + encodeURIComponent("ร้านรุ่งเรือง ก๊อปปี้จังหวัดตรัง"),
+  facebookUrl: "https://www.facebook.com/profile.php?id=100063462609911",
   mapQuery: "145/1 ถ.วิเศษกุล ต.ทับเที่ยง อ.เมือง จ.ตรัง 92000",
   hours: "จันทร์–เสาร์ 07.00–19.00 น. (หยุดวันอาทิตย์)",
   hoursNote: "วันหยุดพิเศษ แจ้งทางเพจ Facebook ของร้าน",
