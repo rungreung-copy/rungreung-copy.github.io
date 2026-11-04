@@ -10,14 +10,6 @@ window.WORKS_MANIFEST = {
     "images/works/binding/07.webp",
     "images/works/binding/08.webp"
   ],
-  "calendar": [
-    "images/works/calendar/01.webp",
-    "images/works/calendar/02.webp",
-    "images/works/calendar/03.webp",
-    "images/works/calendar/04.webp",
-    "images/works/calendar/05.webp",
-    "images/works/calendar/06.webp"
-  ],
   "color-print": [
     "images/works/color-print/01.webp",
     "images/works/color-print/02.webp",
@@ -50,6 +42,19 @@ window.WORKS_MANIFEST = {
     "images/works/portfolio/06.webp",
     "images/works/portfolio/07.webp"
   ],
+  "saddle": [
+    "images/works/saddle/01.webp",
+    "images/works/saddle/02.webp",
+    "images/works/saddle/03.webp"
+  ],
+  "slide": [
+    "images/works/slide/01.webp",
+    "images/works/slide/02.webp",
+    "images/works/slide/03.webp",
+    "images/works/slide/04.webp",
+    "images/works/slide/05.webp",
+    "images/works/slide/06.webp"
+  ],
   "spiral": [
     "images/works/spiral/01.webp",
     "images/works/spiral/02.webp",
@@ -60,19 +65,21 @@ window.WORKS_MANIFEST = {
     "images/works/spiral/07.webp",
     "images/works/spiral/08.webp",
     "images/works/spiral/09.webp",
-    "images/works/spiral/10.webp"
+    "images/works/spiral/10.webp",
+    "images/works/spiral/11.webp",
+    "images/works/spiral/12.webp"
   ],
   "stationery": [
     "images/works/stationery/01.webp",
     "images/works/stationery/02.webp",
-    "images/works/stationery/03.webp"
+    "images/works/stationery/03.webp",
+    "images/works/stationery/04.webp",
+    "images/works/stationery/05.webp",
+    "images/works/stationery/90.webp",
+    "images/works/stationery/91.webp"
   ],
   "tape": [
     "images/works/tape/01.webp",
-    "images/works/tape/02.webp",
-    "images/works/tape/03.webp",
-    "images/works/tape/04.webp",
-    "images/works/tape/05.webp",
-    "images/works/tape/06.webp"
+    "images/works/tape/02.webp"
   ]
 };

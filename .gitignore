@@ -9,3 +9,10 @@ Desktop.ini
 # local reference files (not part of the site)
 *.mp4
 561c28b5-0a16-4fa3-8f8b-c6b615a0e744.jpg
+
+# raw source images (not published; some show old contact details or prices)
+images/logo/
+images/price-rates/
+images/brand/line chat*
+images/samples/*
+!images/samples/port.jpg

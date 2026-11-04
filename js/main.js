@@ -1,4 +1,4 @@
-/* global SHOP, PRICE_BOARD, CALC_CATEGORIES, UNAVAILABLE_SERVICES, BIND_OPTIONS, THICKNESS_TIERS, SHEETS_PER_CM, WORK_CATEGORIES */
+/* global SHOP, PRICE_BOARD, CALC_CATEGORIES, UNAVAILABLE_SERVICES, BIND_OPTIONS, THICKNESS_TIERS, SHEETS_PER_CM, WORK_CATEGORIES, SERVICE_CALC, PORTFOLIO, PRINT_MODES, COLOR_DETECT */
 (() => {
   "use strict";
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -18,7 +18,6 @@
     lineId: SHOP.lineId,
     email0: SHOP.emails[0],
     phone0: SHOP.phones[0],
-    fax: SHOP.fax,
     facebookName: SHOP.facebookName,
   };
   // ช่องอื่น (ที่อยู่ เวลาเปิด) ถูกเขียนลง HTML โดย scripts/prerender.mjs แล้ว
@@ -64,28 +63,19 @@
     return { price: tier.price, tier };
   };
   const nextTier = (item, qty) => item.tiers && item.tiers.find((t) => t.min > qty);
-  const itemByKey = (key) => {
-    const [c, i] = key.split(":").map(Number);
-    return CALC_CATEGORIES[c].items[i];
-  };
   const thicknessIndex = (sheets) => {
     const cm = sheets / SHEETS_PER_CM;
     const idx = THICKNESS_TIERS.findIndex((t) => cm <= t.maxCm);
     return idx === -1 ? THICKNESS_TIERS.length - 1 : idx;
   };
   const laminateCat = CALC_CATEGORIES.find((c) => c.id === "laminate");
+  const pricedOptions = (list) => list.map((x, i) => `<option value="${i}">${escapeHtml(x.name)}${x.price ? ` — ${x.startingAt ? "เริ่ม " : ""}${fmt(x.price)} บ.` : ""}</option>`).join("");
 
-  const printOptions = CALC_CATEGORIES.map((c, ci) => (c.printable ? `
-    <optgroup label="${escapeHtml(c.name)}">
-      ${c.items.map((it, ii) => `<option value="${ci}:${ii}">${escapeHtml(it.name)} — ${it.tiers ? "ตามจำนวน" : `${it.startingAt ? "เริ่ม " : ""}${fmt(it.price)} บ./${it.unit}`}</option>`).join("")}
-    </optgroup>` : "")).join("");
-  const defaultPrintKey = (() => {
-    const ci = CALC_CATEGORIES.findIndex((c) => c.id === "bw-print");
-    return `${Math.max(ci, 0)}:0`;
-  })();
+  const modeOptions = PRINT_MODES.map((m, i) => `<option value="${i}">${escapeHtml(m.name)}</option>`).join("");
   const bindOptions = BIND_OPTIONS.map((b, i) => `<option value="${i}">${escapeHtml(b.name)}</option>`).join("");
   const thickOptions = THICKNESS_TIERS.map((t, i) => `<option value="${i}">${escapeHtml(t.label)} ซม.</option>`).join("");
   const lamOptions = laminateCat.items.map((it, i) => `<option value="${i}"${it.name.includes("A4") ? " selected" : ""}>${escapeHtml(it.name)} — ${fmt(it.price)} บ./แผ่น</option>`).join("");
+  const PAGE_KINDS = [["bw", "ขาวดำ"], ["light", "สีไม่มาก"], ["full", "สีเต็มแผ่น"]];
 
   /* =========================================================
      Calculator — uploaded files (jobs)
@@ -96,7 +86,6 @@
   const sumEl = $("#calcSum");
   const noteEl = $("#calcNote");
   const baseNote = noteEl.textContent.trim();
-  let jobSeq = 0;
 
   const showMsg = (lines) => {
     msgEl.innerHTML = lines.length ? lines.map((l) => `<p>${l}</p>`).join("") : "";
@@ -120,13 +109,64 @@
     }
     return pdfjsPromise;
   };
-  const countPdfPages = async (file) => {
+
+  // ---- ตรวจสีของหน้า: วาดย่อแล้วนับสัดส่วนพิกเซลที่เป็นสี (ทำในเครื่องลูกค้าทั้งหมด) ----
+  const THUMB_WIDTH = 120;
+  const classifyCanvas = (ctx, w, h) => {
+    const { data } = ctx.getImageData(0, 0, w, h);
+    let colored = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      const max = Math.max(data[i], data[i + 1], data[i + 2]);
+      const min = Math.min(data[i], data[i + 1], data[i + 2]);
+      if (max - min > COLOR_DETECT.chroma) colored += 1;
+    }
+    const ratio = colored / (w * h);
+    if (ratio < COLOR_DETECT.bwMax) return "bw";
+    return ratio < COLOR_DETECT.lightMax ? "light" : "full";
+  };
+  const makeThumbCanvas = () => {
+    const canvas = document.createElement("canvas");
+    return { canvas, ctx: canvas.getContext("2d", { willReadFrequently: true }) };
+  };
+  const classifyPdf = async (file, onProgress) => {
     const pdfjs = await loadPdfjs();
     const doc = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
-    const n = doc.numPages;
+    const counts = { bw: 0, light: 0, full: 0 };
+    const { canvas, ctx } = makeThumbCanvas();
+    let unread = 0;
+    for (let i = 1; i <= doc.numPages; i += 1) {
+      onProgress(i, doc.numPages);
+      try {
+        const page = await doc.getPage(i);
+        const scale = THUMB_WIDTH / page.getViewport({ scale: 1 }).width;
+        const viewport = page.getViewport({ scale });
+        canvas.width = Math.ceil(viewport.width);
+        canvas.height = Math.ceil(viewport.height);
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // intent "print" ไม่ใช้ requestAnimationFrame: ลูกค้าสลับแท็บระหว่างตรวจแล้วงานไม่ค้าง
+        await page.render({ canvasContext: ctx, viewport, intent: "print" }).promise;
+        counts[classifyCanvas(ctx, canvas.width, canvas.height)] += 1;
+        page.cleanup();
+      } catch {
+        counts.bw += 1; // หน้าที่อ่านไม่ได้: นับเป็นขาวดำแล้วแจ้งให้ตรวจเอง
+        unread += 1;
+      }
+    }
+    const total = doc.numPages;
     doc.destroy();
-    return n;
+    return { counts, total, unread };
   };
+  const classifyImage = async (file) => {
+    const bmp = await createImageBitmap(file);
+    const { canvas, ctx } = makeThumbCanvas();
+    canvas.width = THUMB_WIDTH;
+    canvas.height = Math.max(1, Math.round((bmp.height / bmp.width) * THUMB_WIDTH));
+    ctx.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+    bmp.close();
+    return classifyCanvas(ctx, canvas.width, canvas.height);
+  };
+  const countsText = (c) => PAGE_KINDS.filter(([k]) => c[k] > 0).map(([k, l]) => `${l} ${c[k]}`).join(" · ");
 
   const isPdf = (f) => f.type === "application/pdf" || /\.pdf$/i.test(f.name);
   const isImage = (f) => f.type.startsWith("image/") || /\.(jpe?g|png|gif|webp|heic|bmp)$/i.test(f.name);
@@ -145,37 +185,45 @@
     });
 
     if (images.length) {
+      const counts = { bw: 0, light: 0, full: 0 };
+      let failed = 0;
+      for (let i = 0; i < images.length; i += 1) {
+        showMsg([...notes, `⏳ กำลังตรวจสีรูปภาพ ${i + 1}/${images.length}…`]);
+        try {
+          counts[await classifyImage(images[i])] += 1;
+        } catch {
+          counts.full += 1; // เปิดรูปไม่ได้ (เช่น HEIC): นับเป็นสีเต็มแผ่นไว้ก่อน
+          failed += 1;
+        }
+      }
+      if (failed) notes.push(`⚠️ ตรวจสีรูปไม่ได้ ${failed} รูป จึงนับเป็นสีเต็มแผ่นไว้ก่อน แก้ตัวเลขได้ในรายการด้านล่าง`);
       addJob({
         name: images.length === 1 ? images[0].name : `รูปภาพ ${images.length} ไฟล์`,
         icon: "🖼️",
-        pages: images.length,
-        detected: `${images.length} รูป = ${images.length} หน้า`,
-        printKey: (() => {
-          const ci = CALC_CATEGORIES.findIndex((c) => c.id === "color-print-a4");
-          return ci >= 0 ? `${ci}:1` : defaultPrintKey;
-        })(),
+        counts,
+        detected: `รูปภาพ ${images.length} รูป · ${countsText(counts)}`,
       });
     }
 
-    if (pdfs.length) showMsg([...notes, "⏳ กำลังนับจำนวนหน้า PDF…"]);
     for (const f of pdfs) {
       try {
-        const n = await countPdfPages(f);
-        addJob({ name: f.name, icon: "📄", pages: n, detected: `PDF ${n} หน้า` });
+        const { counts, total, unread } = await classifyPdf(f, (i, n) => {
+          showMsg([...notes, `⏳ กำลังตรวจสี <b>${escapeHtml(f.name)}</b> หน้า ${i}/${n}…`]);
+        });
+        if (unread) notes.push(`⚠️ <b>${escapeHtml(f.name)}</b> — อ่าน ${unread} หน้าไม่ได้ จึงนับเป็นขาวดำไว้ก่อน กรุณาตรวจตัวเลขอีกครั้ง`);
+        addJob({ name: f.name, icon: "📄", counts, detected: `PDF ${total} หน้า · ${countsText(counts)}` });
       } catch (err) {
         const locked = err && err.name === "PasswordException";
         notes.push(`⚠️ <b>${escapeHtml(f.name)}</b> — ${locked ? "ไฟล์ติดรหัสผ่าน" : err && err.message === "load" ? "โหลดตัวนับหน้าไม่สำเร็จ (ตรวจสอบอินเทอร์เน็ต)" : "อ่านไฟล์ไม่ได้"} ใส่จำนวนหน้าเองได้ในรายการด้านล่าง`);
-        addJob({ name: f.name, icon: "📄", pages: 1, detected: "นับหน้าไม่ได้ — กรุณาใส่จำนวนหน้าเอง", warn: true });
+        addJob({ name: f.name, icon: "📄", counts: { bw: 1, light: 0, full: 0 }, detected: "ตรวจไม่ได้ — กรุณาใส่จำนวนหน้าเอง", warn: true });
       }
     }
     showMsg(notes);
   };
 
-  const addJob = ({ name, icon, pages, detected, warn = false, printKey = defaultPrintKey }) => {
-    const id = ++jobSeq;
+  const addJob = ({ name, icon, counts, detected, warn = false }) => {
     const el = document.createElement("article");
     el.className = "job";
-    el.dataset.id = id;
     el.innerHTML = `
       <header class="job__head">
         <span class="job__icon" aria-hidden="true">${icon}</span>
@@ -186,10 +234,20 @@
         <button class="job__del" type="button" aria-label="ลบไฟล์นี้">✕</button>
       </header>
       <div class="job__grid">
-        <label class="job__print">งานพิมพ์<select class="j-print">${printOptions}</select></label>
-        <label>จำนวนหน้า<input class="j-pages" type="number" min="1" step="1" inputmode="numeric" value="${pages}"></label>
+        <label class="job__print">กระดาษ / ขนาด<select class="j-mode">${modeOptions}</select></label>
         <label>จำนวนชุด<input class="j-sets" type="number" min="1" step="1" inputmode="numeric" value="1"></label>
       </div>
+      <div class="pgrid">
+        ${PAGE_KINDS.map(([k, label]) => `
+          <label class="pgrow">
+            <span class="pgrow__dot pgrow__dot--${k}" aria-hidden="true"></span>
+            <span class="pgrow__name">${label}</span>
+            <input class="j-${k}" type="number" min="0" step="1" inputmode="numeric" value="${counts[k]}" aria-label="จำนวนหน้า${label}">
+            <span class="pgrow__unit">หน้า</span>
+            <em class="pgrow__calc j-${k}-calc"></em>
+          </label>`).join("")}
+      </div>
+      <label class="chk job__duplex j-duplex-wrap"><input type="checkbox" class="j-duplex"> <span>ปริ้นท์ขาวดำหน้า/หลัง</span></label>
       <p class="job__calc j-calc"></p>
       <div class="job__addons">
         <div class="addon">
@@ -210,7 +268,6 @@
         </div>
       </div>
       <footer class="job__foot">รวมไฟล์นี้ <strong class="j-sub">0 บาท</strong></footer>`;
-    $(".j-print", el).value = printKey;
     el._auto = { thick: true, lam: true };
 
     el.addEventListener("input", (e) => {
@@ -231,26 +288,47 @@
   };
 
   const computeJob = (el) => {
-    const item = itemByKey($(".j-print", el).value);
-    const pages = toInt($(".j-pages", el).value);
+    const mode = PRINT_MODES[$(".j-mode", el).value];
     const sets = toInt($(".j-sets", el).value, 1);
-    const units = item.duplex ? Math.ceil(pages / 2) : pages; // หน่วยที่ป้ายคิด (หน้า หรือ แผ่น)
-    const sheets = item.duplex ? units : pages; // แผ่นกระดาษจริงต่อชุด
-    const totalUnits = units * sets;
-    const { price, tier } = unitPrice(item, totalUnits);
-    let sub = price * totalUnits;
-    let starting = !!item.startingAt;
+    const pages = { bw: toInt($(".j-bw", el).value), light: toInt($(".j-light", el).value), full: toInt($(".j-full", el).value) };
+    const totalPages = pages.bw + pages.light + pages.full;
+    const rate = (k) => (mode.all !== undefined ? mode.all : mode[k]);
+    const setsText = sets > 1 ? ` × ${sets} ชุด` : "";
 
-    // ข้อความอธิบายการคิดราคา
-    const parts = [];
-    parts.push(item.duplex
-      ? `${pages} หน้า → ${units} แผ่น (หน้า/หลัง)`
-      : `${pages} หน้า`);
-    if (sets > 1) parts.push(`× ${sets} ชุด = ${totalUnits} ${item.unit}`);
-    parts.push(`· ${item.unit}ละ ${fmt(price)} บาท${tier && tier.min > 1 ? ` (ราคา ${tier.min} ${item.unit}ขึ้นไป)` : ""}`);
-    const nt = nextTier(item, totalUnits);
-    if (nt) parts.push(`· ครบ ${nt.min} ${item.unit} เหลือ${item.unit}ละ ${fmt(nt.price)} บาท`);
-    $(".j-calc", el).textContent = parts.join(" ");
+    const duplexWrap = $(".j-duplex-wrap", el);
+    duplexWrap.hidden = !mode.duplex;
+    const duplex = !!mode.duplex && $(".j-duplex", el).checked;
+
+    let sub = 0;
+    let starting = false;
+    let tierNote = "";
+    PAGE_KINDS.forEach(([k]) => {
+      const out = $(`.j-${k}-calc`, el);
+      if (k === "bw" && duplex) {
+        const bwSheets = Math.ceil(pages.bw / 2);
+        const totalSheets = bwSheets * sets;
+        const { price, tier } = unitPrice(mode.duplex, totalSheets);
+        const cost = price * totalSheets;
+        sub += cost;
+        out.textContent = pages.bw ? `→ ${bwSheets} แผ่น × ${fmt(price)}${setsText} = ${fmt(cost)} บ.` : "";
+        if (tier.min > 1) tierNote = `หน้า/หลัง ${tier.min} แผ่นขึ้นไป แผ่นละ ${fmt(price)} บาท`;
+        const nt = nextTier(mode.duplex, totalSheets);
+        if (nt && pages.bw) tierNote = `หน้า/หลังครบ ${nt.min} แผ่น เหลือแผ่นละ ${fmt(nt.price)} บาท`;
+        return;
+      }
+      const cost = rate(k) * pages[k] * sets;
+      const isStart = pages[k] > 0 && (k === "bw" ? mode.bwStarting : mode.colorStarting);
+      starting = starting || !!isStart;
+      sub += cost;
+      out.textContent = pages[k] ? `× ${isStart ? "เริ่ม " : ""}${fmt(rate(k))}${setsText} = ${fmt(cost)} บ.` : "";
+    });
+
+    const sheets = duplex ? Math.ceil(totalPages / 2) : totalPages; // แผ่นกระดาษจริงต่อชุด
+    $(".j-calc", el).textContent = [
+      `รวม ${totalPages} หน้า${duplex ? ` (${sheets} แผ่น)` : ""}${setsText}`,
+      mode.all !== undefined ? "กระดาษนี้ราคาเดียวกันทุกแบบ" : "",
+      tierNote,
+    ].filter(Boolean).join(" · ");
 
     // เข้าเล่ม
     if ($(".j-bind-on", el).checked) {
@@ -296,21 +374,94 @@
   window.addEventListener("drop", (e) => e.preventDefault());
 
   /* =========================================================
+     Portfolio — ปก / เนื้อใน / เข้าเล่ม แยกรายการ
+     ใช้ร่วมกันทั้งในหน้าต่างบริการและเครื่องคำนวณใหญ่
+     ========================================================= */
+  const PF_FIELDS = [".p-cover", ".p-cover-qty", ".p-inner", ".p-inner-qty", ".p-bind", ".p-clear", ".p-sets"];
+  const pfHtml = () => `
+    <div class="pf">
+      <fieldset class="pf__group">
+        <legend>ปก</legend>
+        <label>กระดาษ<select class="p-cover">${pricedOptions(PORTFOLIO.covers)}</select></label>
+        <label>จำนวนหน้า<input class="p-cover-qty" type="number" min="0" step="1" inputmode="numeric" value="2"></label>
+      </fieldset>
+      <fieldset class="pf__group">
+        <legend>เนื้อใน</legend>
+        <label>กระดาษ<select class="p-inner">${pricedOptions(PORTFOLIO.inners)}</select></label>
+        <label>จำนวนหน้า<input class="p-inner-qty" type="number" min="0" step="1" inputmode="numeric" value="20"></label>
+      </fieldset>
+      <fieldset class="pf__group">
+        <legend>เข้าเล่ม</legend>
+        <label>รูปแบบ<select class="p-bind">${pricedOptions(PORTFOLIO.binds)}</select></label>
+        <label class="p-clear-wrap">แผ่นใส<select class="p-clear">${pricedOptions(PORTFOLIO.clearSheets)}</select></label>
+      </fieldset>
+      <label class="pf__sets">จำนวนเล่ม<input class="p-sets" type="number" min="1" step="1" inputmode="numeric" value="1"></label>
+      <p class="pf__calc p-calc"></p>
+    </div>`;
+  const computePf = (root) => {
+    const cover = PORTFOLIO.covers[$(".p-cover", root).value];
+    const inner = PORTFOLIO.inners[$(".p-inner", root).value];
+    const bind = PORTFOLIO.binds[$(".p-bind", root).value];
+    const coverQty = toInt($(".p-cover-qty", root).value);
+    const innerQty = toInt($(".p-inner-qty", root).value);
+    const sets = toInt($(".p-sets", root).value, 1);
+    const wrap = $(".p-clear-wrap", root);
+    wrap.hidden = !bind.clearSheet;
+    const clear = bind.clearSheet ? PORTFOLIO.clearSheets[$(".p-clear", root).value] : PORTFOLIO.clearSheets[0];
+    const coverCost = cover.price * coverQty;
+    const innerCost = inner.price * innerQty;
+    const perBook = coverCost + innerCost + bind.price + clear.price;
+    $(".p-calc", root).textContent = [
+      `ปก ${fmt(coverCost)}`,
+      `เนื้อใน ${fmt(innerCost)}`,
+      `เข้าเล่ม ${bind.startingAt ? "เริ่ม " : ""}${fmt(bind.price)}`,
+      clear.price ? `แผ่นใส ${fmt(clear.price)}` : "",
+    ].filter(Boolean).join(" + ") + ` = เล่มละ ${fmt(perBook)} บาท${sets > 1 ? ` × ${sets} เล่ม` : ""}`;
+    return { sub: perBook * sets, starting: !!bind.startingAt };
+  };
+
+  const addPortfolio = (from) => {
+    const el = document.createElement("article");
+    el.className = "job pf-card";
+    el.innerHTML = `
+      <header class="job__head">
+        <span class="job__icon" aria-hidden="true">🎓</span>
+        <div class="job__title"><strong>พอร์ตโฟลิโอ</strong><small>เลือกปก เนื้อใน และเข้าเล่มแยกกัน</small></div>
+        <button class="job__del" type="button" aria-label="ลบรายการนี้">✕</button>
+      </header>
+      ${pfHtml()}
+      <footer class="job__foot">รวมรายการนี้ <strong class="j-sub">0 บาท</strong></footer>`;
+    if (from) PF_FIELDS.forEach((sel) => { $(sel, el).value = $(sel, from).value; });
+    el.addEventListener("input", recalc);
+    el.addEventListener("change", recalc);
+    $(".job__del", el).addEventListener("click", () => { el.remove(); recalc(); });
+    rowsEl.appendChild(el);
+    recalc();
+  };
+  const computePfCard = (el) => {
+    const r = computePf(el);
+    $(".j-sub", el).textContent = `${r.starting ? "เริ่ม " : ""}${fmt(r.sub)} บาท`;
+    return r;
+  };
+
+  /* =========================================================
      Calculator — manual rows (งานที่ไม่มีไฟล์)
      ========================================================= */
   const catOptions = CALC_CATEGORIES.map((c, i) => `<option value="${i}">${escapeHtml(c.name)}</option>`).join("");
+  const itemOptions = (cat) => cat.items.map((it, i) => `<option value="${i}">${escapeHtml(it.name)}</option>`).join("");
 
-  const tierHint = (item, qty) => {
+  const tierHint = (item, qty, cat) => {
     const { price, tier } = unitPrice(item, qty);
-    const parts = [`${item.unit}ละ ${fmt(price)} บาท`];
+    const parts = [`${item.unit}ละ ${item.startingAt ? "เริ่ม " : ""}${fmt(price)} บาท`];
     if (tier && tier.min > 1) parts.push(`(ราคา ${tier.min} ${item.unit}ขึ้นไป)`);
     const next = nextTier(item, qty);
     if (next) parts.push(`· ถ้าครบ ${next.min} ${item.unit} เหลือ${item.unit}ละ ${fmt(next.price)} บาท`);
-    if (item.startingAt) parts.push("· ราคาเริ่มต้น อาจสูงกว่านี้ตามงานจริง");
+    if (cat.note) parts.push(`· ${cat.note}`);
+    else if (item.startingAt) parts.push("· ราคาเริ่มต้น อาจสูงกว่านี้ตามงานจริง");
     return parts.join(" ");
   };
 
-  const addRow = () => {
+  const addRow = ({ cat: catIdx = 0, item: itemIdx = 0, qty } = {}) => {
     const row = document.createElement("div");
     row.className = "crow";
     row.innerHTML = `
@@ -322,46 +473,131 @@
       <div class="crow__hint c-hint"></div>`;
     const cat = $(".c-cat", row);
     const itemSel = $(".c-item", row);
+    const qtyInput = $(".c-qty", row);
     const fillItems = () => {
-      itemSel.innerHTML = CALC_CATEGORIES[cat.value].items
-        .map((it, i) => `<option value="${i}">${escapeHtml(it.name)}</option>`).join("");
+      const c = CALC_CATEGORIES[cat.value];
+      itemSel.innerHTML = itemOptions(c);
+      qtyInput.value = c.defaultQty || 1;
     };
+    cat.value = catIdx;
+    fillItems();
+    itemSel.value = itemIdx;
+    if (qty) qtyInput.value = qty;
     cat.addEventListener("change", () => { fillItems(); recalc(); });
     itemSel.addEventListener("change", recalc);
-    $(".c-qty", row).addEventListener("input", recalc);
+    qtyInput.addEventListener("input", recalc);
     $(".crow__del", row).addEventListener("click", () => { row.remove(); recalc(); });
-    fillItems();
     rowsEl.appendChild(row);
     recalc();
   };
 
   const computeRow = (row) => {
-    const item = CALC_CATEGORIES[$(".c-cat", row).value].items[$(".c-item", row).value];
+    const cat = CALC_CATEGORIES[$(".c-cat", row).value];
+    const item = cat.items[$(".c-item", row).value];
     const qty = toInt($(".c-qty", row).value);
     const { price } = unitPrice(item, qty);
     const sub = price * qty;
     $(".c-unit", row).textContent = item.unit;
     $(".c-sub", row).textContent = `${item.startingAt ? "เริ่ม " : ""}${fmt(sub)} บาท`;
-    $(".c-hint", row).textContent = qty > 0 ? tierHint(item, qty) : "";
+    $(".c-hint", row).textContent = qty > 0 ? tierHint(item, qty, cat) : "";
     return { sub, starting: !!item.startingAt && qty > 0 };
   };
 
   function recalc() {
     let total = 0;
     let anyStarting = false;
-    [...$$(".job", jobsEl).map(computeJob), ...$$(".crow", rowsEl).map(computeRow)].forEach(({ sub, starting }) => {
+    [
+      ...$$(".job", jobsEl).map(computeJob),
+      ...$$(".crow", rowsEl).map(computeRow),
+      ...$$(".pf-card", rowsEl).map(computePfCard),
+    ].forEach(({ sub, starting }) => {
       total += sub;
       anyStarting = anyStarting || starting;
     });
-    total = Math.max(0, total);
     sumEl.textContent = `${anyStarting ? "เริ่มต้น " : ""}${fmt(total)} บาท`;
     noteEl.textContent = anyStarting
       ? `${baseNote} บางรายการเป็นราคาเริ่มต้น ราคาจริงขึ้นอยู่กับปริมาณสี/ความหนาของงาน`
       : baseNote;
   }
 
-  $("#calcAdd").addEventListener("click", addRow);
+  $("#calcAdd").addEventListener("click", () => addRow());
+  $("#calcAddPf").addEventListener("click", () => addPortfolio());
   recalc();
+
+  /* =========================================================
+     Service modal — กดการ์ดบริการแล้วคำนวณราคาของบริการนั้น
+     ========================================================= */
+  const svc = $("#svcModal");
+  const svcBody = $(".svc__body", svc);
+  const svcSum = $(".svc__sum", svc);
+  const svcNote = $(".svc__note", svc);
+  let svcConf = null;
+  let svcReturnFocus = null;
+
+  const svcCompute = () => {
+    if (svcConf.portfolio) {
+      const r = computePf(svcBody);
+      svcSum.textContent = `${r.starting ? "เริ่มต้น " : ""}${fmt(r.sub)} บาท`;
+      svcNote.textContent = "";
+      return;
+    }
+    const cat = CALC_CATEGORIES[$(".s-cat", svcBody).value];
+    const item = cat.items[$(".s-item", svcBody).value];
+    const qty = toInt($(".s-qty", svcBody).value);
+    const { price } = unitPrice(item, qty);
+    $(".s-unit", svcBody).textContent = item.unit;
+    svcSum.textContent = `${item.startingAt ? "เริ่มต้น " : ""}${fmt(price * qty)} บาท`;
+    svcNote.textContent = qty > 0 ? tierHint(item, qty, cat) : "";
+  };
+
+  const openService = (key) => {
+    const conf = SERVICE_CALC[key];
+    if (!conf) return;
+    svcConf = conf;
+    svcReturnFocus = document.activeElement;
+    $("#svcTitle").textContent = conf.title;
+    if (conf.portfolio) {
+      svcBody.innerHTML = pfHtml();
+    } else {
+      const cats = conf.cats.map((id) => CALC_CATEGORIES.findIndex((c) => c.id === id));
+      svcBody.innerHTML = `
+        <label ${cats.length > 1 ? "" : "hidden"}>ประเภท<select class="s-cat">${cats.map((i) => `<option value="${i}">${escapeHtml(CALC_CATEGORIES[i].name)}</option>`).join("")}</select></label>
+        <label>รายการ<select class="s-item"></select></label>
+        <label><span>จำนวน (<span class="s-unit"></span>)</span><input class="s-qty" type="number" min="1" step="1" inputmode="numeric" value="1"></label>`;
+      const fill = () => {
+        const c = CALC_CATEGORIES[$(".s-cat", svcBody).value];
+        $(".s-item", svcBody).innerHTML = itemOptions(c);
+        $(".s-qty", svcBody).value = c.defaultQty || 1;
+      };
+      fill();
+      $(".s-cat", svcBody).addEventListener("change", fill);
+    }
+    svcCompute();
+    svc.hidden = false;
+    document.body.classList.add("no-scroll");
+    $(".svc__close", svc).focus();
+  };
+  const closeService = () => {
+    svc.hidden = true;
+    document.body.classList.remove("no-scroll");
+    if (svcReturnFocus) svcReturnFocus.focus();
+  };
+
+  svcBody.addEventListener("input", svcCompute);
+  svcBody.addEventListener("change", svcCompute);
+  $(".svc__close", svc).addEventListener("click", closeService);
+  svc.addEventListener("click", (e) => { if (e.target === svc) closeService(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !svc.hidden) closeService(); });
+  $(".svc__add", svc).addEventListener("click", () => {
+    if (svcConf.portfolio) addPortfolio(svcBody);
+    else addRow({ cat: Number($(".s-cat", svcBody).value), item: Number($(".s-item", svcBody).value), qty: toInt($(".s-qty", svcBody).value, 1) });
+    closeService();
+    $("#calculator").scrollIntoView();
+  });
+  $(".services").addEventListener("click", (e) => {
+    const card = e.target.closest("[data-service]");
+    if (card) openService(card.dataset.service);
+  });
 
   /* =========================================================
      Works — Fan-Out decks + lightbox

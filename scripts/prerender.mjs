@@ -48,7 +48,6 @@ const shopText = {
   lineId: SHOP.lineId,
   email0: SHOP.emails[0],
   phone0: SHOP.phones[0],
-  fax: SHOP.fax,
   facebookName: SHOP.facebookName,
   addressLine,
   hoursText: SHOP.hours,
@@ -82,25 +81,24 @@ between("prices", PRICE_BOARD.map((card) => `
 between("nap", [
   `<strong>${esc("ร้าน" + SHOP.name)}</strong>`,
   addressLine ? esc(addressLine) : esc(SHOP.province),
-  `โทร ${SHOP.phones.map((p) => `<a href="tel:${tel(p)}">${esc(p)}</a>`).join(", ")} · แฟกซ์ ${esc(SHOP.fax)}`,
+  `โทร ${SHOP.phones.map((p) => `<a href="tel:${tel(p)}">${esc(p)}</a>`).join(", ")}`,
   `LINE: <a href="${esc(SHOP.lineUrl)}" target="_blank" rel="noopener">${esc(SHOP.lineId)}</a> · <a href="mailto:${esc(SHOP.emails[0])}">${esc(SHOP.emails[0])}</a>`,
   SHOP.hours ? `เวลาเปิด: ${esc(SHOP.hours)}` : "",
 ].filter(Boolean).join("<br>"));
 
 // ---------- JSON-LD ----------
-const services = ["ถ่ายเอกสารขาวดำและสี", "ปริ้นท์งานขาวดำและสี", "ถ่ายสำเนาบัตรประชาชน", "สแกนเอกสาร PDF/JPG", "เข้าเล่มรายงาน", "เคลือบบัตร", "ทำพอร์ตโฟลิโอ", "แฟกซ์", "จำหน่ายอุปกรณ์เครื่องเขียน"];
+const services = ["ถ่ายเอกสารขาวดำและสี", "ปริ้นท์งานขาวดำและสี", "ถ่ายสำเนาบัตรประชาชน", "สแกนเอกสาร PDF/JPG", "เข้าเล่มรายงาน", "เคลือบบัตร", "ทำพอร์ตโฟลิโอ", "แผ่นพับสี", "นามบัตร", "จำหน่ายอุปกรณ์เครื่องเขียน"];
 const ld = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "@id": abs("#business"),
   name: "ร้าน" + SHOP.name,
   alternateName: "Rungreung Copy",
-  description: "ร้านถ่ายเอกสาร ปริ้นท์ขาวดำ-สี สแกน เข้าเล่ม เคลือบบัตร พอร์ตโฟลิโอ แฟกซ์ และอุปกรณ์เครื่องเขียน จังหวัดตรัง",
+  description: "ร้านถ่ายเอกสาร ปริ้นท์ขาวดำ-สี สแกน เข้าเล่ม เคลือบบัตร พอร์ตโฟลิโอ แผ่นพับ นามบัตร และอุปกรณ์เครื่องเขียน จังหวัดตรัง",
   url: SHOP.siteUrl,
   image: [abs("images/og.jpg"), abs("images/brand/logo.png")],
   logo: abs("images/brand/logo.png"),
   telephone: intl(SHOP.phones[0]),
-  faxNumber: intl(SHOP.fax),
   email: SHOP.emails[0],
   contactPoint: SHOP.phones.map((p) => ({ "@type": "ContactPoint", telephone: intl(p), contactType: "customer service", availableLanguage: "th" })),
   priceRange: "฿",
