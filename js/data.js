@@ -52,6 +52,13 @@ const PRICE_BOARD = [
     ["บัตรประชาชน หน้า/หลัง", "แผ่นละ 2 บาท"],
     ["ทะเบียนบ้าน หน้า/หลัง", "แผ่นละ 2 บาท"],
   ], note: "ถ่ายอย่างละ 20 แผ่นขึ้นไป แผ่นละ 0.50 บาท" },
+  { title: "ถ่ายหนังสือ / ถ่ายบิล", tone: "orange", rows: [
+    ["ถ่ายหนังสือทั้งเล่ม", "หน้าละ 0.70 บาท"],
+    ["ถ่ายหนังสือ ชุดแรก", "หน้าละ 1 บาท"],
+    ["ถ่ายหนังสือ ชุดต่อไป / เล่มต่อไป", "หน้าละ 0.50 บาท"],
+    ["ถ่ายบิล ชุดแรก", "หน้าละ 1 บาท"],
+    ["ถ่ายบิล ชุดต่อไป", "หน้าละ 0.50 บาท"],
+  ]},
   { title: "ถ่ายเอกสารสี", tone: "mint", rows: [
     ["A4", "เริ่มต้นที่ หน้าละ 5 บาท"],
     ["F14", "เริ่มต้นที่ หน้าละ 10 บาท"],
@@ -180,6 +187,13 @@ const CALC_CATEGORIES = [
     { name: "A3 หน้าเดียว", unit: "หน้า", price: 3 },
     { name: "A3 หน้า/หลัง", unit: "แผ่น", price: 6 },
   ]},
+  { id: "book-copy", name: "ถ่ายหนังสือ / ถ่ายบิล", items: [
+    { name: "ถ่ายหนังสือทั้งเล่ม", unit: "หน้า", price: 0.7 },
+    { name: "ถ่ายหนังสือ ชุดแรก", unit: "หน้า", price: 1 },
+    { name: "ถ่ายหนังสือ ชุดต่อไป / เล่มต่อไป", unit: "หน้า", price: 0.5 },
+    { name: "ถ่ายบิล ชุดแรก", unit: "หน้า", price: 1 },
+    { name: "ถ่ายบิล ชุดต่อไป", unit: "หน้า", price: 0.5 },
+  ]},
   { id: "color-copy", name: "ถ่ายเอกสารสี", note: "ราคาขึ้นอยู่กับขนาดของสี", items: [
     { name: "A4", unit: "หน้า", price: 5, startingAt: true },
     { name: "F14", unit: "หน้า", price: 10, startingAt: true },
@@ -222,7 +236,7 @@ const CALC_CATEGORIES = [
 /* ---------- การ์ดบริการ → หน้าต่างคำนวณ ----------
    key ตรงกับ data-service ใน index.html · cats = หมวดใน CALC_CATEGORIES */
 const SERVICE_CALC = {
-  copy: { title: "ถ่ายเอกสาร", cats: ["bw-copy", "color-copy"] },
+  copy: { title: "ถ่ายเอกสาร", cats: ["bw-copy", "book-copy", "color-copy"] },
   print: { title: "ปริ้นท์งาน", cats: ["bw-print", "color-print-a4", "color-print-a3"] },
   "id-copy": { title: "สำเนาบัตร", cats: ["id-copy"] },
   scan: { title: "สแกนเอกสาร", cats: ["scan"] },
