@@ -112,7 +112,7 @@ const ld = {
     postalCode: a.postalCode,
     addressCountry: "TH",
   }).filter(([, v]) => v)),
-  hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SHOP.mapQuery)}`,
+  hasMap: `https://www.google.com/maps/search/?api=1&query=${q}`,
   sameAs: [SHOP.lineUrl, realFacebook].filter(Boolean),
   hasOfferCatalog: {
     "@type": "OfferCatalog",

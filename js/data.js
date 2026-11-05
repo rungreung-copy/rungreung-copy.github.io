@@ -24,8 +24,8 @@ const SHOP = {
   },
   // เวลาเปิด-ปิดแบบละเอียด สำหรับ Google
   openingHours: [{ days: ["Mo", "Tu", "We", "Th", "Fr", "Sa"], opens: "07:00", closes: "19:00" }],
-  // TODO: พิกัดร้าน (คลิกขวาที่หมุดใน Google Maps แล้วคัดลอกตัวเลข) เช่น { lat: 7.5563, lng: 99.6114 }
-  geo: null,
+  // พิกัดหน้าร้าน (คลิกขวาที่หมุดใน Google Maps แล้วคัดลอกตัวเลข)
+  geo: { lat: 7.554291, lng: 99.610184 },
   siteUrl: "https://rungreung-copy.github.io/",
 };
 

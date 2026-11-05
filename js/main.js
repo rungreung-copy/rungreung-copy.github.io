@@ -29,7 +29,7 @@
   $("#emailLinks").innerHTML = SHOP.emails
     .map((e) => `<a href="mailto:${escapeHtml(e)}">${escapeHtml(e)}</a>`).join("<br>");
   $("#fbLink").href = SHOP.facebookUrl;
-  const q = encodeURIComponent(SHOP.mapQuery);
+  const q = encodeURIComponent(SHOP.geo ? `${SHOP.geo.lat},${SHOP.geo.lng}` : SHOP.mapQuery);
   $("#mapFrame").src = `https://maps.google.com/maps?q=${q}&z=16&output=embed`;
   $("#mapLink").href = `https://www.google.com/maps/search/?api=1&query=${q}`;
   $("#year").textContent = new Date().getFullYear() + 543;
