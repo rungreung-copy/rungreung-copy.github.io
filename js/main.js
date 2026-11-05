@@ -691,6 +691,10 @@
     ...Object.keys(manifest).filter((id) => !knownIds.includes(id)).map((id) => ({ id, title: id.replace(/[-_]/g, " "), desc: "" })),
   ].filter((c) => (manifest[c.id] || []).length);
 
+  // การ์ดและแกลเลอรีใช้รูปย่อ (scripts/build-thumbs.py) ส่วนรูปเต็มใช้ตอนขยายดู
+  const thumbOf = (src) => src.replace("images/works/", "images/thumbs/").replace(/\.[^.]+$/, ".webp");
+  const thumbFallback = (src) => `onerror="this.onerror=null;this.src='${escapeHtml(src)}'"`;
+  const photoAlt = (c, i) => escapeHtml(`ตัวอย่างงาน${c.title}${c.desc ? ` ${c.desc}` : ""} ร้านรุ่งเรือง ก๊อปปี้ ตรัง รูปที่ ${i + 1}`);
   const MAX_FAN = 5;
   const decksEl = $("#decks");
   decksEl.innerHTML = categories.map((c) => {
@@ -714,7 +718,7 @@
       if (!slot) return `<span class="deck__card deck__card--ghost" style="${style}" aria-hidden="true"></span>`;
       return `<button class="deck__card" type="button" data-index="${slot.index}" data-label="${i === n - 1 ? escapeHtml(c.title) : ""}" style="${style}"
         aria-label="เปิดแกลเลอรี ${escapeHtml(c.title)}">
-        <img src="${escapeHtml(slot.src)}" alt="ตัวอย่างงาน${escapeHtml(c.title)} ร้านรุ่งเรือง ก๊อปปี้ รูปที่ ${slot.index + 1}" loading="lazy">
+        <img src="${escapeHtml(thumbOf(slot.src))}" ${thumbFallback(slot.src)} alt="${photoAlt(c, slot.index)}" loading="lazy">
       </button>`;
     }).join("");
     return `
@@ -756,7 +760,7 @@
     $(".gallery__desc", gal).textContent = c.desc || "";
     galGrid.innerHTML = manifest[cat].map((src, i) => `
       <button class="gallery__item" type="button" data-index="${i}" style="animation-delay:${Math.min(i, 12) * 45}ms" aria-label="ขยายรูปที่ ${i + 1}">
-        <img src="${escapeHtml(src)}" alt="ตัวอย่างงาน${escapeHtml(c.title)} รูปที่ ${i + 1}" loading="lazy">
+        <img src="${escapeHtml(thumbOf(src))}" ${thumbFallback(src)} alt="${photoAlt(c, i)}" loading="lazy">
       </button>`).join("");
     gal.hidden = false;
     gal.scrollTop = 0;
@@ -790,7 +794,7 @@
     const imgs = manifest[lbState.cat];
     const cat = categories.find((c) => c.id === lbState.cat);
     lbImg.src = imgs[lbState.index];
-    lbImg.alt = `${cat.title} รูปที่ ${lbState.index + 1}`;
+    lbImg.alt = `ตัวอย่างงาน${cat.title} ร้านรุ่งเรือง ก๊อปปี้ ตรัง รูปที่ ${lbState.index + 1}`;
     lbCap.textContent = `${cat.title} · ${lbState.index + 1} / ${imgs.length}`;
     const multi = imgs.length > 1;
     $$(".lightbox__nav", lb).forEach((b) => { b.hidden = !multi; });

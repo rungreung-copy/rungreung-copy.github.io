@@ -1,4 +1,4 @@
-﻿.claude/
+.claude/
 _*.html
 Thumbs.db
 Desktop.ini
@@ -16,3 +16,6 @@ images/price-rates/
 images/brand/line chat*
 images/samples/*
 !images/samples/port.jpg
+
+# generated at deploy by scripts/build-thumbs.py
+images/thumbs/

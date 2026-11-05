@@ -26,6 +26,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build work photo thumbnails
+        run: |
+          python -m pip install --quiet pillow
+          python scripts/build-thumbs.py
       - name: Build works manifest
         run: node scripts/build-works-manifest.mjs
       - name: Pre-render shop info, prices and JSON-LD into HTML

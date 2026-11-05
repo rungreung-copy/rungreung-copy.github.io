@@ -52,7 +52,7 @@ const shopText = {
   addressLine,
   hoursText: SHOP.hours,
   hoursNote: SHOP.hoursNote || "",
-  hoursLine: `ร้าน${SHOP.name} ${SHOP.province}`,
+  hoursLine: `ร้าน${SHOP.name} เป็นร้านถ่ายเอกสารในตัวเมืองตรัง ตั้งอยู่ที่ ${addressLine} เปิด${SHOP.hours} รับถ่ายเอกสาร ปริ้นงาน สแกน เข้าเล่ม เคลือบบัตร ทำพอร์ตโฟลิโอ แผ่นพับ และนามบัตร`,
 };
 html = html.replace(/(<(\w+)\b[^>]*\bdata-shop="(\w+)"[^>]*>)[^<]*(<\/\2>)/g,
   (m, open, tag, key, close) => (key in shopText ? `${open}${esc(shopText[key])}${close}` : m));
@@ -112,6 +112,7 @@ const ld = {
     postalCode: a.postalCode,
     addressCountry: "TH",
   }).filter(([, v]) => v)),
+  hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SHOP.mapQuery)}`,
   sameAs: [SHOP.lineUrl, realFacebook].filter(Boolean),
   hasOfferCatalog: {
     "@type": "OfferCatalog",
