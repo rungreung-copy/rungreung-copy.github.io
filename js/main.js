@@ -778,6 +778,8 @@
     const item = e.target.closest(".gallery__item");
     if (item) openLightbox(galCat, Number(item.dataset.index));
   });
+  // รูปเด่นด้านบน: กดแล้วเปิดแกลเลอรีของหมวดนั้น
+  $$("[data-gallery]").forEach((b) => b.addEventListener("click", () => openGallery(b.dataset.gallery)));
   $(".gallery__close", gal).addEventListener("click", closeGallery);
   gal.addEventListener("click", (e) => { if (e.target === gal) closeGallery(); });
   document.addEventListener("click", (e) => {
