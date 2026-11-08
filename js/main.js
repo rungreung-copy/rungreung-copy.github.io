@@ -49,7 +49,7 @@
     <article class="pcard tone-${card.tone} reveal">
       <h3>${escapeHtml(card.title)}</h3>
       <table><tbody>
-        ${card.rows.map(([a, b]) => `<tr><td>${escapeHtml(a)}</td><td>${escapeHtml(b)}</td></tr>`).join("")}
+        ${card.rows.map(([a, b]) => `<tr><td>${escapeHtml(a)}</td><td${b.length > 24 ? ' class="wrap"' : ""}>${escapeHtml(b)}</td></tr>`).join("")}
       </tbody></table>
       ${card.note ? `<p class="pcard__note">* ${escapeHtml(card.note)}</p>` : ""}
     </article>`).join("");

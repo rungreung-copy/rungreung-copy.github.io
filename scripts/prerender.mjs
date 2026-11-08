@@ -73,7 +73,7 @@ fillId("year", String(new Date().getFullYear() + 543));
 between("prices", PRICE_BOARD.map((card) => `
           <article class="pcard tone-${card.tone} reveal">
             <h3>${esc(card.title)}</h3>
-            <table><tbody>${card.rows.map(([x, y]) => `<tr><td>${esc(x)}</td><td>${esc(y)}</td></tr>`).join("")}</tbody></table>
+            <table><tbody>${card.rows.map(([x, y]) => `<tr><td>${esc(x)}</td><td${y.length > 24 ? ' class="wrap"' : ""}>${esc(y)}</td></tr>`).join("")}</tbody></table>
             ${card.note ? `<p class="pcard__note">* ${esc(card.note)}</p>` : ""}
           </article>`).join("") + "\n        ");
 

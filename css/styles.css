@@ -181,20 +181,37 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 .unavailable li small { color: var(--muted); margin-left: .4em; }
 
 /* ---------- Prices ---------- */
-.prices { columns: 3 320px; column-gap: 20px; }
+.prices { columns: 4 290px; column-gap: 20px; }
 .pcard {
+  --tone: #e6f1fc;
   break-inside: avoid; margin: 0 0 20px;
-  background: #fff; border-radius: var(--radius); overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  border-top: 5px solid var(--tone, var(--blue));
+  background: #fff; border-radius: 22px; overflow: hidden;
+  box-shadow: var(--shadow);
 }
-.pcard h3 { font-size: 1.08rem; margin: 0; padding: 16px 20px 10px; color: var(--navy-800); }
-.pcard table { width: 100%; border-collapse: collapse; font-size: .95rem; }
-.pcard td { padding: 8px 20px; border-top: 1px solid #eef0f8; }
-.pcard td:last-child { text-align: right; font-weight: 600; color: var(--navy-700); white-space: nowrap; }
-.pcard__note { margin: 0; padding: 10px 20px 14px; font-size: .88rem; color: var(--muted); background: #fafbff; }
-.pcard { border-top-color: var(--blue); }
-.pcard h3 { font-weight: 500; }
+/* สีหัวการ์ดตามหมวด (ตามดีไซน์ Figma v6) */
+.tone-slate { --tone: #e6ecf6; }
+.tone-sky { --tone: #dcf0fc; }
+.tone-orange { --tone: #ffe8d4; }
+.tone-mint { --tone: #d9f4e8; }
+.tone-blue { --tone: #dde8fb; }
+.tone-violet { --tone: #ebe4fb; }
+.tone-yellow { --tone: #fff1c2; }
+.tone-peach { --tone: #ffe2da; }
+.tone-sand { --tone: #f4ead6; }
+.tone-green { --tone: #dcf2dc; }
+.tone-pink { --tone: #fde1ee; }
+.pcard h3 { margin: 0; padding: 12px 18px; background: var(--tone); font: 600 1.06rem/1.45 var(--font-head); color: var(--ink); }
+.pcard table, .pcard tbody { display: block; }
+.pcard table { margin: 6px 16px 8px; font-size: .95rem; }
+.pcard tr { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.pcard tr + tr { border-top: 1px solid var(--border); }
+.pcard td { padding: 9px 0; color: var(--ink); }
+.pcard td:first-child { flex: 1; min-width: 0; }
+.pcard td:last-child { text-align: right; font-weight: 600; color: var(--navy-800); white-space: nowrap; }
+/* ราคายาว: ย้ายราคาลงบรรทัดใหม่ ชิดขวา เหมือนในดีไซน์ */
+.pcard tr:has(.wrap) { flex-direction: column; align-items: stretch; gap: 0; }
+.pcard td.wrap { padding-top: 0; }
+.pcard__note { margin: 0; padding: 0 16px 14px; font-size: .86rem; color: var(--muted); }
 
 
 /* ---------- Calculator ---------- */
