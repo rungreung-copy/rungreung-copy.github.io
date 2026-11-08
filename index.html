@@ -188,17 +188,19 @@
   <header class="nav" id="nav">
     <div class="container nav__inner">
       <a href="#top" class="nav__brand" aria-label="ร้านรุ่งเรือง ก๊อปปี้ หน้าแรก">
-        <img src="images/brand/logo-sign.webp" width="828" height="248" alt="ร้านรุ่งเรือง ก๊อปปี้">
+        <img class="nav__logo" src="images/brand/logo-round.webp" width="240" height="240" alt="">
+        <span class="nav__name"><img src="images/brand/wordmark-navy.webp" width="700" height="182" alt="ร้านรุ่งเรือง ก๊อปปี้"><small>ถ่ายเอกสาร · ปริ้นท์ · เข้าเล่ม · สแกน</small></span>
       </a>
       <nav class="nav__links" id="navLinks">
+        <a href="#top" class="is-active">หน้าหลัก</a>
         <a href="#services">บริการ</a>
         <a href="#prices">ราคา</a>
         <a href="#calculator">คำนวณราคา</a>
-        <a href="#works">ผลงาน</a>
-        <a href="#faq">คำถามที่พบบ่อย</a>
-        <a href="#contact">ติดต่อร้าน</a>
+        <a href="#highlights">ผลงาน</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">ติดต่อ</a>
       </nav>
-      <a class="btn btn--line nav__line" data-line-link href="https://lin.ee/R92xUrz" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-line"/></svg> ส่งงานทาง LINE</a>
+      <a class="btn btn--line nav__line" data-line-link href="https://lin.ee/R92xUrz" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-line"/></svg> สั่งผ่าน LINE <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <button class="nav__toggle" id="navToggle" aria-label="เปิดเมนู" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -207,40 +209,29 @@
 
   <!-- ================= HERO ================= -->
   <section class="hero" id="top">
-    <div class="hero__clouds" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <div class="hero__photo">
-      <img src="images/brand/hero-storefront.webp" width="960" height="415" fetchpriority="high" alt="หน้าร้านรุ่งเรือง ก๊อปปี้ ตึกป้ายสีเหลืองคำว่าถ่ายเอกสาร ถนนวิเศษกุล จังหวัดตรัง">
-    </div>
     <div class="container hero__inner">
       <div class="hero__content">
-        <h1 class="hero__title"><span class="sr-only">ร้านรุ่งเรือง ก๊อปปี้ ร้านถ่ายเอกสาร จังหวัดตรัง </span><span class="nw">งานพิมพ์ครบ</span> <span class="nw hero__line2">จบในร้านเดียว<svg class="swoosh" viewBox="0 0 204 20" fill="none" preserveAspectRatio="none" aria-hidden="true"><path d="M3 16C61 5 143 3 201 7" stroke="#FFC91F" stroke-width="6" stroke-linecap="round"/></svg></span><svg class="spark" viewBox="0 0 60 84" fill="none" aria-hidden="true"><path d="M6 6l8 26M34 30l20-18M26 60l28-2" stroke="#FFC91F" stroke-width="7" stroke-linecap="round"/></svg></h1>
-        <p class="hero__lead"><span class="nw">ส่งไฟล์งานผ่าน LINE ได้เลย</span> <span class="nw">แล้วมารับงานที่ร้าน</span></p>
-        <div class="hero__actions">
-          <a class="btn btn--line" data-line-link href="https://lin.ee/R92xUrz" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-line"/></svg> ส่งงานทาง LINE</a>
-          <a class="btn btn--outline" href="#calculator"><svg class="ico ico--calc" aria-hidden="true"><use href="#i-calc"/></svg> คำนวณราคา <span aria-hidden="true">›</span></a>
-        </div>
+        <h1 class="hero__title"><span class="sr-only">ร้านรุ่งเรือง ก๊อปปี้ ร้านถ่ายเอกสาร จังหวัดตรัง</span><img src="images/brand/wordmark-navy.webp" width="700" height="182" alt="" fetchpriority="high"><svg class="spark" viewBox="0 0 60 50" aria-hidden="true"><path d="M8 40L2 22M28 34L26 6M46 38L58 16" stroke="#FFC91F" stroke-width="7" stroke-linecap="round"/></svg><svg class="swoosh" viewBox="0 0 460 26" preserveAspectRatio="none" aria-hidden="true"><path d="M4 20C130 8 300 4 456 4 300 10 150 16 40 24z" fill="#123a9c"/></svg></h1>
+        <p class="hero__lead">“ถ่ายเอกสาร ปริ้นท์ เข้าเล่ม<br>งานพิมพ์คุณภาพ”</p>
+        <a class="hero__phone" data-phone-link href="tel:0844465589"><span class="hero__phone-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 12l5 8-3 3c1.5 3.5 4 6 7 7l3-3 8 5c-1 4-4 6-8 5-9-1.5-15-8-16-17-.5-4 1-7 4-8z" fill="currentColor"/></svg></span>โทร. 084-446-5589, 083-595-6493</a>
+        <a class="btn hero__cta" href="#services">ดูบริการทั้งหมด <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
-      <div class="hero__place">
-        <svg class="hero__pin" aria-hidden="true"><use href="#i-pin"/></svg>
-        <p class="place__pill">ร้านอยู่หน้า <mark>โรงเรียนสภาราชินี</mark> จังหวัดตรัง</p>
-        <p class="place__near">ใกล้กับสะพานลอย</p>
-        <svg class="spark" viewBox="0 0 60 84" fill="none" aria-hidden="true"><path d="M6 6l8 26M34 30l20-18M26 60l28-2" stroke="#FFC91F" stroke-width="7" stroke-linecap="round"/></svg>
+      <div class="hero__art" aria-hidden="true">
+        <img class="hero__copier" src="images/brand/copier.webp" width="600" height="787" alt="">
+        <img class="hero__mascot" src="images/brand/mascot-reach.webp" width="900" height="928" alt="" fetchpriority="high">
+        <svg class="hero__spark" viewBox="0 0 60 50"><path d="M8 40L2 22M28 34L26 6M46 38L58 16" stroke="#FFC91F" stroke-width="7" stroke-linecap="round"/></svg>
+        <p class="hero__note">งานไว<br>คุณภาพเยี่ยม!</p>
       </div>
     </div>
-    <ul class="container hero__stats">
-      <li><svg aria-hidden="true"><use href="#i-doc"/></svg><div><span>ถ่ายเอกสาร A4 (20 หน้าขึ้นไป)</span><strong>0.50 บาท</strong></div></li>
-      <li><svg aria-hidden="true"><use href="#i-ink"/></svg><div><span>ปริ้นท์สี A4 เริ่มต้น</span><strong>5 บาท</strong></div></li>
-      <li><svg aria-hidden="true"><use href="#i-idcard"/></svg><div><span>เคลือบบัตรเริ่มต้น</span><strong>10 บาท</strong></div></li>
-    </ul>
   </section>
 
   <main>
-    <!-- ================= SERVICES + ราคาโดยย่อ ================= -->
+    <!-- ================= SERVICES ================= -->
     <section class="section section--first" id="services">
-      <div class="container split split--services">
-        <div>
-          <h2 class="sec-title">บริการของเรา</h2>
-          <div class="services">
+      <div class="container">
+        <h2 class="sec-title">บริการของเรา</h2>
+        <p class="sec-hint">กดการ์ดบริการที่ต้องการ เพื่อคำนวณราคาได้เลย</p>
+        <div class="services">
             <button class="service reveal" type="button" data-service="copy"><svg aria-hidden="true"><use href="#i-doc"/></svg><h3>ถ่ายเอกสาร</h3><p class="sr-only">ขาว-ดำ และสี ขนาด A4, F14, B4, A3 ถ่ายหน้า/หลัง ถ่ายหนังสือ และถ่ายบิล · กดเพื่อคำนวณราคา</p></button>
             <button class="service reveal" type="button" data-service="print"><svg aria-hidden="true"><use href="#i-print"/></svg><h3>ปริ้นท์งาน</h3><p class="sr-only">ขาว-ดำ / สี บนกระดาษธรรมดา กระดาษแข็ง โฟโต้ และสติกเกอร์ สูงสุด A3+ · กดเพื่อคำนวณราคา</p></button>
             <button class="service reveal" type="button" data-service="id-copy"><svg aria-hidden="true"><use href="#i-idcard"/></svg><h3>สำเนาบัตร</h3><p class="sr-only">ถ่ายสำเนาบัตรประชาชน ทะเบียนบ้าน หน้า/หลังในแผ่นเดียว · กดเพื่อคำนวณราคา</p></button>
@@ -251,13 +242,7 @@
             <button class="service reveal" type="button" data-service="leaflet"><svg aria-hidden="true"><use href="#i-leaflet"/></svg><h3>แผ่นพับสี</h3><p class="sr-only">แผ่นพับ A4 กระดาษธรรมดา กระดาษแข็ง และโฟโต้ · กดเพื่อคำนวณราคา</p></button>
             <button class="service reveal" type="button" data-service="namecard"><svg aria-hidden="true"><use href="#i-namecard"/></svg><h3>นามบัตร</h3><p class="sr-only">กระดาษแข็ง PVC โฟโต้ และสติกเกอร์โฟโต้ ราคาไม่รวมออกแบบ · กดเพื่อคำนวณราคา</p></button>
             <article class="service service--static reveal"><svg aria-hidden="true"><use href="#i-pen"/></svg><h3>เครื่องเขียน</h3><p class="sr-only">ปากกา ดินสอ ไฮไลท์ กระดาษ และอุปกรณ์เครื่องเขียนครบครัน มีจำหน่ายที่หน้าร้าน</p></article>
-          </div>
         </div>
-        <aside class="brief reveal">
-          <h2 class="sec-title">ตารางราคาโดยย่อ</h2>
-          <table><tbody><tr><td>ถ่ายเอกสาร A4 ขาว-ดำ</td><td>0.50 บาท/หน้า</td></tr><tr><td>ถ่ายเอกสาร A4 สี เริ่มต้น</td><td>5 บาท/หน้า</td></tr><tr><td>ปริ้นท์ขาว-ดำ A4</td><td>2 บาท/หน้า</td></tr><tr><td>ปริ้นท์สี A4 เริ่มต้น</td><td>5 บาท/หน้า</td></tr><tr><td>เข้าเล่มสันกาว เริ่มต้น</td><td>30 บาท/เล่ม</td></tr><tr><td>เคลือบบัตร เริ่มต้น</td><td>10 บาท/แผ่น</td></tr></tbody></table>
-          <a class="more" href="#prices">ดูราคาทั้งหมด <span aria-hidden="true">→</span></a>
-        </aside>
       </div>
       <div class="container">
         <!-- บริการที่ไม่มี: เติมข้อมูลใน js/data.js → UNAVAILABLE_SERVICES -->
@@ -267,6 +252,15 @@
           <ul id="unavailableList"></ul>
         </div>
       </div>
+    </section>
+
+    <!-- ================= ราคาเริ่มต้น ================= -->
+    <section class="section section--stats" aria-label="ราคาเริ่มต้น">
+    <ul class="container stats">
+      <li><svg aria-hidden="true"><use href="#i-doc"/></svg><div><span>ถ่ายเอกสาร A4 (20 หน้าขึ้นไป)</span><strong>0.50 บาท</strong></div></li>
+      <li><svg aria-hidden="true"><use href="#i-ink"/></svg><div><span>ปริ้นท์สี A4 เริ่มต้น</span><strong>5 บาท</strong></div></li>
+      <li><svg aria-hidden="true"><use href="#i-idcard"/></svg><div><span>เคลือบบัตรเริ่มต้น</span><strong>10 บาท</strong></div></li>
+    </ul>
     </section>
 
     <!-- ================= CALCULATOR ================= -->
@@ -306,68 +300,6 @@
               <p class="calc__note" id="calcNote">* เป็นราคาประมาณเท่านั้น ราคาจริงทางร้านจะยืนยันอีกครั้งเมื่อเห็นงาน</p>
             </aside>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= ผลงานเด่น + FAQ ================= -->
-    <section class="section">
-      <div class="container split split--works">
-        <div>
-          <div class="sec-row"><h2 class="sec-title">ผลงานของเรา</h2><a class="more" href="#works">ดูผลงานทั้งหมด <span aria-hidden="true">→</span></a></div>
-          <div class="wtiles reveal"><button class="wtile" type="button" data-gallery="portfolio" aria-label="เปิดแกลเลอรี พอร์ตโฟลิโอปกสีชมพู งานจริงของร้าน"><img src="images/thumbs/portfolio/05.webp" alt="พอร์ตโฟลิโอปกสีชมพู งานจริงของร้าน" loading="lazy"></button><button class="wtile" type="button" data-gallery="color-print" aria-label="เปิดแกลเลอรี แผ่นพับและเมนูสี งานจริงของร้าน"><img src="images/thumbs/color-print/02.webp" alt="แผ่นพับและเมนูสี งานจริงของร้าน" loading="lazy"></button><button class="wtile" type="button" data-gallery="binding" aria-label="เปิดแกลเลอรี เล่มเข้าสันกาวปกสีฟ้า งานจริงของร้าน"><img src="images/thumbs/binding/07.webp" alt="เล่มเข้าสันกาวปกสีฟ้า งานจริงของร้าน" loading="lazy"></button><button class="wtile" type="button" data-gallery="saddle" aria-label="เปิดแกลเลอรี เล่มเย็บมุงหลังคา งานจริงของร้าน"><img src="images/thumbs/saddle/03.webp" alt="เล่มเย็บมุงหลังคา งานจริงของร้าน" loading="lazy"></button></div>
-        </div>
-        <div id="faq">
-          <div class="sec-row"><h2 class="sec-title">คำถามที่พบบ่อย</h2></div>
-          <div class="faq">
-          <details class="faq__item">
-            <summary>ส่งไฟล์มาปริ้นท์ยังไง รับไฟล์อะไรบ้าง?</summary>
-            <p>ส่งไฟล์ได้ทาง LINE ID <b data-shop="lineId">rungreung2549</b> หรืออีเมล <b data-shop="email0">pensirikongsuk@gmail.com</b>
-               แนะนำให้บันทึกเป็นไฟล์ <b>PDF</b> เพื่อป้องกันฟอนต์และรูปเลื่อน ถ้าเป็นไฟล์แบบอื่นทักมาถามทางร้านก่อนได้เลย</p>
-          </details>
-          <details class="faq__item">
-            <summary>ใช้เวลานานแค่ไหน รอรับได้ไหม?</summary>
-            <!-- TODO: ใส่ระยะเวลาทำงานจริงของแต่ละประเภทงาน -->
-            <p>ขึ้นอยู่กับประเภทและจำนวนงาน ถ้าเป็นงานพอร์ตโฟลิโอหรืองานเข้าเล่ม แนะนำให้ส่งไฟล์ล่วงหน้าอย่างน้อย 2 ชั่วโมงก่อนมารับ
-               งานอื่นๆ สอบถามเวลาทาง LINE หรือโทรหาร้านได้เลย</p>
-          </details>
-          <details class="faq__item">
-            <summary>ชำระเงินทางไหนได้บ้าง?</summary>
-            <!-- TODO: ใส่ช่องทางชำระเงินจริง เช่น เงินสด / PromptPay / โอนบัญชี -->
-            <p>สอบถามช่องทางชำระเงินได้ที่หน้าร้าน หรือทาง LINE <b data-shop="lineId">rungreung2549</b></p>
-          </details>
-          <details class="faq__item">
-            <summary>สั่งงานล่วงหน้า หรือทำงานด่วนได้ไหม?</summary>
-            <p>สั่งล่วงหน้าได้ ส่งไฟล์มาทาง LINE หรืออีเมล แล้วแจ้งวันเวลาที่จะมารับ ถ้าเป็นงานด่วนโทรหาร้านได้ที่ <b data-shop="phone0">084-446-5589</b></p>
-          </details>
-        </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= WORKS ================= -->
-    <section class="section section--tint" id="works">
-      <div class="container">
-        <div class="sec-head reveal">
-          <h2 class="sec-title">ผลงานทั้งหมดแยกตามหมวด</h2>
-          <p>งานจริงที่ลูกค้าไว้ใจให้ทางร้านทำ · ชี้หรือแตะที่กองรูปเพื่อกางดู คลิกเพื่อเปิดแกลเลอรีของแต่ละหมวด</p>
-        </div>
-        <div class="decks" id="decks"></div>
-
-        <div class="portfolio-info reveal">
-          <div class="portfolio-info__text">
-            <h3>เตรียมไฟล์ Portfolio ยังไงให้สวย</h3>
-            <ol>
-              <li>บันทึกเป็นไฟล์ <b>PDF</b> ป้องกันฟอนต์เลื่อนหรือตกหล่น</li>
-              <li>ไม่ทำงานชิดขอบทั้ง 4 ด้าน เพื่อความสวยงามตอนเข้าเล่ม</li>
-              <li>ตรวจเช็คไฟล์ให้เรียบร้อยก่อนส่ง เพราะแก้เล่มใช้เวลานานกว่าเข้าเล่มใหม่</li>
-              <li>ส่งไฟล์ล่วงหน้า <b>อย่างน้อย 2 ชั่วโมง</b> ก่อนมารับ</li>
-            </ol>
-            <p class="muted">กระดาษโฟโต้: มันเงา สีสดสวย · กระดาษขาวแข็ง PVC: ไม่มันวาว สีออกละมุน</p>
-          </div>
-          <a class="portfolio-info__img" href="images/samples/port.jpg" target="_blank" rel="noopener">
-            <img src="images/crops/port-720.webp" width="720" height="1018" alt="รายละเอียดการทำ Portfolio: ราคากระดาษปก PVC และโฟโต้ เนื้อใน และค่าเข้าเล่มสันกาว 50 บาท" loading="lazy">
-          </a>
         </div>
       </div>
     </section>
@@ -464,54 +396,134 @@
       </div>
     </section>
 
-    <!-- ================= CONTACT ================= -->
-    <section class="contact" id="contact">
+    <!-- ================= ทำไมต้องเลือก ================= -->
+    <section class="why" aria-labelledby="whyTitle">
+      <div class="container why__inner">
+        <div class="why__main">
+          <h2 class="sec-title" id="whyTitle">ทำไมต้องเลือก รุ่งเรือง ก๊อปปี้ ?</h2>
+          <ul class="why__cards">
+            <li class="reveal"><span class="why__ico"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M20 38l-6 20 10-4 6 8 4-14M44 38l6 20-10-4-6 8-4-14" fill="#123a9c"/><circle cx="32" cy="26" r="20" fill="#1259d6"/><circle cx="32" cy="26" r="13" fill="#fff"/><path d="M25 26l5 5 9-10" fill="none" stroke="#1259d6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>งานคุณภาพ<br>คมชัด สีสวย</span></li>
+            <li class="reveal"><span class="why__ico"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M38 4L12 36h17l-5 24 28-34H34z" fill="#1259d6"/></svg></span><span>รวดเร็ว<br>ทันใจ</span></li>
+            <li class="reveal"><span class="why__ico"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M34 6h22v22L28 58 4 34z" fill="#1259d6"/><circle cx="46" cy="17" r="5" fill="#fff"/><path d="M20 34l12 12" stroke="#ffc91f" stroke-width="4" stroke-linecap="round"/></svg></span><span>ราคายุติธรรม<br>เป็นกันเอง</span></li>
+            <li class="reveal"><span class="why__ico"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 36v-6a22 22 0 0144 0v6" fill="none" stroke="#123a9c" stroke-width="5"/><rect x="5" y="32" width="12" height="20" rx="5" fill="#1259d6"/><rect x="47" y="32" width="12" height="20" rx="5" fill="#1259d6"/><path d="M53 52c0 5-6 7-14 7" fill="none" stroke="#123a9c" stroke-width="4"/><circle cx="37" cy="59" r="4" fill="#1259d6"/></svg></span><span>ดูแลใกล้ชิด<br>ด้วยใจบริการ</span></li>
+          </ul>
+        </div>
+        <div class="why__mascot" aria-hidden="true">
+          <img src="images/brand/mascot-thumbs.webp" width="560" height="583" alt="" loading="lazy">
+          <p class="why__quote">“งานดี ราคาดี<br>บริการด้วยใจ”</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ผลงานเด่น ================= -->
+    <section class="section" id="highlights">
       <div class="container">
-        <div class="cband reveal">
-          <div class="cband__title">
-            <h2>ติดต่อเรา</h2>
-            <strong>ร้านรุ่งเรือง ก๊อปปี้</strong>
-            <span>ยินดีให้บริการครับ</span>
-            <svg class="swoosh" viewBox="0 0 204 20" fill="none" preserveAspectRatio="none" aria-hidden="true"><path d="M3 16C61 5 143 3 201 7" stroke="#FFC91F" stroke-width="6" stroke-linecap="round"/></svg>
-          </div>
-          <div class="contact__map">
-            <iframe id="mapFrame" title="แผนที่ร้านรุ่งเรือง ก๊อปปี้" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=7.554291%2C99.610184&amp;z=16&amp;output=embed"></iframe>
-            <a class="btn btn--accent contact__dir" id="mapLink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=7.554291%2C99.610184">🧭 นำทางไปร้าน</a>
-          </div>
-          <div class="cinfo"><svg aria-hidden="true"><use href="#i-clock"/></svg><span>เวลาเปิด-ปิด</span><strong data-shop="hoursText">จันทร์–เสาร์ 07.00–19.00 น. (หยุดวันอาทิตย์)</strong><small class="ccard__note" data-shop="hoursNote">วันหยุดพิเศษ แจ้งทางเพจ Facebook ของร้าน</small></div>
-          <div class="cinfo" id="phoneCard"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>โทร.</span><strong id="phoneLinks"><a href="tel:0844465589">084-446-5589</a>, <a href="tel:0835956493">083-595-6493</a></strong></div>
-          <a class="cinfo" data-line-link href="https://lin.ee/R92xUrz" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-line"/></svg><span>LINE</span><strong data-shop="lineId">rungreung2549</strong></a>
-          <p class="cband__slogan" aria-hidden="true">งานด่วน งานไว<br>ไว้ใจเรา<svg class="swoosh" viewBox="0 0 204 20" fill="none" preserveAspectRatio="none" aria-hidden="true"><path d="M3 16C61 5 143 3 201 7" stroke="#FFC91F" stroke-width="6" stroke-linecap="round"/></svg></p>
+        <h2 class="sec-title">ผลงานของเรา</h2>
+        <div class="wtiles-wrap">
+          <div class="wtiles reveal"><button class="wtile" type="button" data-gallery="portfolio" aria-label="เปิดแกลเลอรี พอร์ตโฟลิโอปกสีชมพู งานจริงของร้าน"><img src="images/thumbs/portfolio/05.webp" alt="พอร์ตโฟลิโอปกสีชมพู งานจริงของร้าน" loading="lazy"></button><button class="wtile" type="button" data-gallery="color-print" aria-label="เปิดแกลเลอรี แผ่นพับและเมนูสี งานจริงของร้าน"><img src="images/thumbs/color-print/02.webp" alt="แผ่นพับและเมนูสี งานจริงของร้าน" loading="lazy"></button><button class="wtile" type="button" data-gallery="binding" aria-label="เปิดแกลเลอรี เล่มเข้าสันกาวปกสีฟ้า งานจริงของร้าน"><img src="images/thumbs/binding/07.webp" alt="เล่มเข้าสันกาวปกสีฟ้า งานจริงของร้าน" loading="lazy"></button><button class="wtile" type="button" data-gallery="saddle" aria-label="เปิดแกลเลอรี เล่มเย็บมุงหลังคา งานจริงของร้าน"><img src="images/thumbs/saddle/03.webp" alt="เล่มเย็บมุงหลังคา งานจริงของร้าน" loading="lazy"></button><button class="wtile" type="button" data-gallery="comb" aria-label="เปิดแกลเลอรี เข้าเล่มสันกระดูกงู งานจริงของร้าน"><img src="images/thumbs/comb/01.webp" alt="เข้าเล่มสันกระดูกงู งานจริงของร้าน" loading="lazy"></button></div>
+          <a class="wtiles__more" href="#works">ดูผลงานทั้งหมด <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
+      </div>
+    </section>
+
+    <!-- ================= WORKS ================= -->
+    <section class="section section--tint" id="works">
+      <div class="container">
+        <div class="sec-head reveal">
+          <h2 class="sec-title">ผลงานทั้งหมดแยกตามหมวด</h2>
+          <p>งานจริงที่ลูกค้าไว้ใจให้ทางร้านทำ · ชี้หรือแตะที่กองรูปเพื่อกางดู คลิกเพื่อเปิดแกลเลอรีของแต่ละหมวด</p>
+        </div>
+        <div class="decks" id="decks"></div>
+
+        <div class="portfolio-info reveal">
+          <div class="portfolio-info__text">
+            <h3>เตรียมไฟล์ Portfolio ยังไงให้สวย</h3>
+            <ol>
+              <li>บันทึกเป็นไฟล์ <b>PDF</b> ป้องกันฟอนต์เลื่อนหรือตกหล่น</li>
+              <li>ไม่ทำงานชิดขอบทั้ง 4 ด้าน เพื่อความสวยงามตอนเข้าเล่ม</li>
+              <li>ตรวจเช็คไฟล์ให้เรียบร้อยก่อนส่ง เพราะแก้เล่มใช้เวลานานกว่าเข้าเล่มใหม่</li>
+              <li>ส่งไฟล์ล่วงหน้า <b>อย่างน้อย 2 ชั่วโมง</b> ก่อนมารับ</li>
+            </ol>
+            <p class="muted">กระดาษโฟโต้: มันเงา สีสดสวย · กระดาษขาวแข็ง PVC: ไม่มันวาว สีออกละมุน</p>
+          </div>
+          <a class="portfolio-info__img" href="images/samples/port.jpg" target="_blank" rel="noopener">
+            <img src="images/crops/port-720.webp" width="720" height="1018" alt="รายละเอียดการทำ Portfolio: ราคากระดาษปก PVC และโฟโต้ เนื้อใน และค่าเข้าเล่มสันกาว 50 บาท" loading="lazy">
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FAQ + CONTACT ================= -->
+    <section class="contact" id="contact">
+      <div class="container contact__row">
+        <div class="contact__faq" id="faq">
+          <h2 class="contact__h"><span class="contact__q" aria-hidden="true">?</span>คำถามที่พบบ่อย</h2>
+          <div class="faq">
+          <details class="faq__item">
+            <summary>ส่งไฟล์มาปริ้นท์ยังไง รับไฟล์อะไรบ้าง?</summary>
+            <p>ส่งไฟล์ได้ทาง LINE ID <b data-shop="lineId">rungreung2549</b> หรืออีเมล <b data-shop="email0">pensirikongsuk@gmail.com</b>
+               แนะนำให้บันทึกเป็นไฟล์ <b>PDF</b> เพื่อป้องกันฟอนต์และรูปเลื่อน ถ้าเป็นไฟล์แบบอื่นทักมาถามทางร้านก่อนได้เลย</p>
+          </details>
+          <details class="faq__item">
+            <summary>ใช้เวลานานแค่ไหน รอรับได้ไหม?</summary>
+            <!-- TODO: ใส่ระยะเวลาทำงานจริงของแต่ละประเภทงาน -->
+            <p>ขึ้นอยู่กับประเภทและจำนวนงาน ถ้าเป็นงานพอร์ตโฟลิโอหรืองานเข้าเล่ม แนะนำให้ส่งไฟล์ล่วงหน้าอย่างน้อย 2 ชั่วโมงก่อนมารับ
+               งานอื่นๆ สอบถามเวลาทาง LINE หรือโทรหาร้านได้เลย</p>
+          </details>
+          <details class="faq__item">
+            <summary>ชำระเงินทางไหนได้บ้าง?</summary>
+            <!-- TODO: ใส่ช่องทางชำระเงินจริง เช่น เงินสด / PromptPay / โอนบัญชี -->
+            <p>สอบถามช่องทางชำระเงินได้ที่หน้าร้าน หรือทาง LINE <b data-shop="lineId">rungreung2549</b></p>
+          </details>
+          <details class="faq__item">
+            <summary>สั่งงานล่วงหน้า หรือทำงานด่วนได้ไหม?</summary>
+            <p>สั่งล่วงหน้าได้ ส่งไฟล์มาทาง LINE หรืออีเมล แล้วแจ้งวันเวลาที่จะมารับ ถ้าเป็นงานด่วนโทรหาร้านได้ที่ <b data-shop="phone0">084-446-5589</b></p>
+          </details>
+          </div>
+        </div>
+        <div class="contact__info">
+          <h2 class="contact__h"><svg aria-hidden="true"><use href="#i-pin"/></svg>ติดต่อเรา</h2>
+          <ul class="clist">
+            <li><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-shop="addressLine">145/1 ถ.วิเศษกุล ต.ทับเที่ยง อ.เมือง จ.ตรัง 92000</span></li>
+            <li class="clist__near">อยู่หน้าโรงเรียนสภาราชินี ใกล้กับสะพานลอย</li>
+            <li><svg aria-hidden="true"><use href="#i-phone"/></svg><span id="phoneLinks"><a href="tel:0844465589">084-446-5589</a>, <a href="tel:0835956493">083-595-6493</a></span></li>
+            <li><svg aria-hidden="true"><use href="#i-clock"/></svg><span><span data-shop="hoursText">จันทร์–เสาร์ 07.00–19.00 น. (หยุดวันอาทิตย์)</span><small data-shop="hoursNote">วันหยุดพิเศษ แจ้งทางเพจ Facebook ของร้าน</small></span></li>
+            <li><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="12" width="36" height="26" rx="4" fill="#1259d6"/><path d="M8 15l16 12 16-12" fill="none" stroke="#fff" stroke-width="3"/></svg><span id="emailLinks"><a href="mailto:pensirikongsuk@gmail.com">pensirikongsuk@gmail.com</a></span></li>
+            <li><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#1259d6"/><path d="M27 40V26h5l1-6h-6v-4c0-2 1-3 3-3h3V8l-5-.3c-5 0-8 3-8 8V20h-5v6h5v14z" fill="#fff"/></svg><a id="fbLink" href="https://www.facebook.com/profile.php?id=100063462609911" target="_blank" rel="noopener"><span data-shop="facebookName">ร้านรุ่งเรือง ก๊อปปี้จังหวัดตรัง</span></a></li>
+          </ul>
+          <a class="btn contact__map" id="mapLink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=7.554291%2C99.610184">🧭 นำทางไปร้าน (Google Maps)</a>
+        </div>
+        <a class="contact__qr" data-line-link href="https://lin.ee/R92xUrz" target="_blank" rel="noopener">
+          <span class="contact__qr-tag"><svg class="ico" aria-hidden="true"><use href="#i-line"/></svg>สั่งผ่าน LINE</span>
+          <img src="images/crops/line-qr.webp" width="240" height="238" alt="QR Code LINE ของร้าน" loading="lazy">
+          <strong data-shop="lineId">rungreung2549</strong>
+        </a>
+        <img class="contact__store" src="images/brand/storefront.webp" width="960" height="866" alt="หน้าร้านรุ่งเรือง ก๊อปปี้ ป้ายเหลืองคำว่าถ่ายเอกสาร ถนนวิเศษกุล จังหวัดตรัง" loading="lazy">
+      </div>
+      <div class="container">
         <p class="contact__about" data-shop="hoursLine">ร้านรุ่งเรือง ก๊อปปี้ เป็นร้านถ่ายเอกสารในตัวเมืองตรัง ตั้งอยู่ที่ 145/1 ถ.วิเศษกุล ต.ทับเที่ยง อ.เมือง จ.ตรัง 92000 เปิดจันทร์–เสาร์ 07.00–19.00 น. (หยุดวันอาทิตย์) รับถ่ายเอกสาร ปริ้นงาน สแกน เข้าเล่ม เคลือบบัตร ทำพอร์ตโฟลิโอ แผ่นพับ และนามบัตร</p>
-        <div class="contact__cards">
-          <a class="ccard reveal" id="addressCard" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=7.554291%2C99.610184">
-              <div class="ccard__icon">📍</div>
-              <div><span>ที่อยู่ร้าน</span><strong data-shop="addressLine">145/1 ถ.วิเศษกุล ต.ทับเที่ยง อ.เมือง จ.ตรัง 92000</strong></div>
-            </a>
-          <a class="ccard ccard--line reveal" data-line-link href="https://lin.ee/R92xUrz" target="_blank" rel="noopener">
-              <img class="ccard__qr" src="images/crops/line-qr.webp" width="240" height="238" alt="QR Code LINE ของร้าน" loading="lazy">
-              <div><span>แชท LINE ของร้าน (ส่งไฟล์งาน)</span><strong data-shop="lineId">rungreung2549</strong></div>
-            </a>
-          <div class="ccard reveal">
-              <div class="ccard__icon">✉️</div>
-              <div><span>อีเมล</span><strong id="emailLinks"><a href="mailto:pensirikongsuk@gmail.com">pensirikongsuk@gmail.com</a></strong></div>
-            </div>
-          <a class="ccard reveal" id="fbLink" href="https://www.facebook.com/profile.php?id=100063462609911" target="_blank" rel="noopener">
-              <div class="ccard__icon">👍</div>
-              <div><span>Facebook / Messenger</span><strong data-shop="facebookName">ร้านรุ่งเรือง ก๊อปปี้จังหวัดตรัง</strong></div>
-            </a>
-        </div>
       </div>
     </section>
   </main>
 
-  <a class="footbar" href="#calculator">อัปโหลดไฟล์และดูราคาทันที! <svg class="ico" aria-hidden="true"><use href="#i-line"/></svg></a>
   <footer class="footer">
-    <div class="container footer__inner">
-      <img class="footer__logo" src="images/brand/logo-sign.webp" width="828" height="248" alt="" loading="lazy">
-      <address class="footer__nap"><!-- prerender:nap --><strong>ร้านรุ่งเรือง ก๊อปปี้</strong><br>145/1 ถ.วิเศษกุล ต.ทับเที่ยง อ.เมือง จ.ตรัง 92000<br>โทร <a href="tel:0844465589">084-446-5589</a>, <a href="tel:0835956493">083-595-6493</a><br>LINE: <a href="https://lin.ee/R92xUrz" target="_blank" rel="noopener">rungreung2549</a> · <a href="mailto:pensirikongsuk@gmail.com">pensirikongsuk@gmail.com</a><br>เวลาเปิด: จันทร์–เสาร์ 07.00–19.00 น. (หยุดวันอาทิตย์)<!-- /prerender:nap --></address>
-      <p>© <span id="year">2569</span> ร้านรุ่งเรือง ก๊อปปี้ จังหวัดตรัง · ขอบคุณทุกท่านที่มาอุดหนุนค่ะ/ครับ 🙏</p>
+    <svg class="footer__waves" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60c220-60 460 30 720 30s500-70 720-30v100H0z" fill="#cfe0fa"/><path d="M0 84c260-44 500 50 760 34s460-70 680-36v78H0z" fill="#6f9ae6"/><path d="M0 108c240-40 480 40 740 30s480-50 700-20v42H0z" fill="#123a9c"/></svg>
+    <div class="footer__body">
+      <div class="container footer__inner">
+        <div class="footer__brand">
+          <img class="footer__logo" src="images/brand/logo-round.webp" width="240" height="240" alt="" loading="lazy">
+          <div><img class="footer__name" src="images/brand/wordmark-white.webp" width="700" height="182" alt="ร้านรุ่งเรือง ก๊อปปี้" loading="lazy"><span>ถ่ายเอกสาร · ปริ้นท์ · เข้าเล่ม · สแกน</span></div>
+        </div>
+        <div class="footer__social">
+          <a data-line-link href="https://lin.ee/R92xUrz" target="_blank" rel="noopener" aria-label="LINE ของร้าน"><svg viewBox="0 0 48 48"><path d="M24 11c-8 0-14 5-14 11 0 5 4 10 11 11 .5.1 1 .4 1 .8l-.2 2c0 .6.5 1 1 .7 1.6-.9 7-4 10-7 2.5-2.3 5-4.7 5-7.5 0-6-6-11-14-11z" fill="currentColor"/></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=100063462609911" target="_blank" rel="noopener" aria-label="Facebook ของร้าน"><svg viewBox="0 0 48 48"><path d="M27 40V26h5l1-6h-6v-4c0-2 1-3 3-3h3V8l-5-.3c-5 0-8 3-8 8V20h-5v6h5v14z" fill="currentColor"/></svg></a>
+          <a href="mailto:pensirikongsuk@gmail.com" aria-label="อีเมลของร้าน"><svg viewBox="0 0 48 48"><rect x="10" y="14" width="28" height="20" rx="3" fill="currentColor"/><path d="M11 16l13 9 13-9" fill="none" stroke="#fff" stroke-width="2.5"/></svg></a>
+        </div>
+        <div class="footer__meta">
+          <address class="footer__nap"><!-- prerender:nap --><strong>ร้านรุ่งเรือง ก๊อปปี้</strong><br>145/1 ถ.วิเศษกุล ต.ทับเที่ยง อ.เมือง จ.ตรัง 92000<br>โทร <a href="tel:0844465589">084-446-5589</a>, <a href="tel:0835956493">083-595-6493</a><br>LINE: <a href="https://lin.ee/R92xUrz" target="_blank" rel="noopener">rungreung2549</a> · <a href="mailto:pensirikongsuk@gmail.com">pensirikongsuk@gmail.com</a><br>เวลาเปิด: จันทร์–เสาร์ 07.00–19.00 น. (หยุดวันอาทิตย์)<!-- /prerender:nap --></address>
+          <p>© <span id="year">2569</span> ร้านรุ่งเรือง ก๊อปปี้ จังหวัดตรัง</p>
+        </div>
+      </div>
     </div>
   </footer>
 
