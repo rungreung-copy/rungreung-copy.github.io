@@ -301,6 +301,8 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 .addon__body .inline { display: flex; align-items: center; gap: 8px; }
 .addon__body .inline input { width: 90px; }
 .addon__body small { font-size: .82rem; color: var(--muted); }
+.chk.chk--sm { font: 500 .88rem var(--font-body) !important; }
+.pf__back { grid-column: 1 / -1; }
 .job__foot { display: flex; justify-content: flex-end; align-items: baseline; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed #dfe3f6; color: var(--muted); }
 .job__foot strong { font: 700 1.25rem var(--font-head); color: var(--navy-800); }
 .calc__manual { padding-top: 6px; }

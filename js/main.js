@@ -1,4 +1,4 @@
-/* global SHOP, PRICE_BOARD, CALC_CATEGORIES, UNAVAILABLE_SERVICES, BIND_OPTIONS, THICKNESS_TIERS, SHEETS_PER_CM, WORK_CATEGORIES, SERVICE_CALC, PORTFOLIO, PRINT_MODES, COLOR_DETECT */
+/* global SHOP, PRICE_BOARD, CALC_CATEGORIES, UNAVAILABLE_SERVICES, BIND_OPTIONS, COVER_OPTIONS, BACK_COVER_PRICE, THICKNESS_TIERS, SHEETS_PER_CM, WORK_CATEGORIES, SERVICE_CALC, PORTFOLIO, PRINT_MODES, COLOR_DETECT */
 (() => {
   "use strict";
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -74,6 +74,7 @@
 
   const modeOptions = PRINT_MODES.map((m, i) => `<option value="${i}">${escapeHtml(m.name)}</option>`).join("");
   const bindOptions = BIND_OPTIONS.map((b, i) => `<option value="${i}">${escapeHtml(b.name)}</option>`).join("");
+  const coverOptions = COVER_OPTIONS.map((c, i) => `<option value="${i}">${escapeHtml(c.name)} — ${fmt(c.price)} บ./หน้า</option>`).join("");
   const thickOptions = THICKNESS_TIERS.map((t, i) => `<option value="${i}">${escapeHtml(t.label)} ซม.</option>`).join("");
   const lamOptions = laminateCat.items.map((it, i) => `<option value="${i}"${it.name.includes("A4") ? " selected" : ""}>${escapeHtml(it.name)} — ${fmt(it.price)} บ./แผ่น</option>`).join("");
   const PAGE_KINDS = [["bw", "ขาวดำ"], ["light", "สีไม่มาก"], ["full", "สีเต็มแผ่น"]];
@@ -267,6 +268,14 @@
             <small class="j-lam-hint"></small>
           </div>
         </div>
+        <div class="addon">
+          <label class="chk"><input type="checkbox" class="j-cov-on"> <span>📘 ปกหน้า-ปกหลัง</span></label>
+          <div class="addon__body j-cov" hidden>
+            <select class="j-cov-type" aria-label="กระดาษปก">${coverOptions}</select>
+            <label class="chk chk--sm"><input type="checkbox" class="j-cov-noback"> <span>ไม่มีปกหลัง — เพิ่มปกหลัง แผ่นละ ${fmt(BACK_COVER_PRICE)} บาท</span></label>
+            <small class="j-cov-hint"></small>
+          </div>
+        </div>
       </div>
       <footer class="job__foot">รวมไฟล์นี้ <strong class="j-sub">0 บาท</strong></footer>`;
     el._auto = { thick: true, lam: true };
@@ -279,6 +288,7 @@
     el.addEventListener("change", (e) => {
       if (e.target.matches(".j-bind-on")) $(".j-bind", el).hidden = !e.target.checked;
       if (e.target.matches(".j-lam-on")) $(".j-lam", el).hidden = !e.target.checked;
+      if (e.target.matches(".j-cov-on")) $(".j-cov", el).hidden = !e.target.checked;
       if (e.target.matches(".j-thick")) el._auto.thick = false;
       recalc();
     });
@@ -359,6 +369,18 @@
       $(".j-lam-hint", el).textContent = `${lamQty} แผ่น × ${fmt(lamItem.price)} = ${fmt(lamItem.price * lamQty)} บาท${el._auto.lam ? " (คิดทุกแผ่น แก้จำนวนได้)" : ""}`;
     }
 
+    // ปกหน้า-ปกหลัง: พิมพ์ปกบนกระดาษพิเศษ · ไม่มีปกหลัง = พิมพ์ปกหน้า 1 หน้า + ปกหลังเปล่า แผ่นละ 5 บาท
+    if ($(".j-cov-on", el).checked) {
+      const cov = COVER_OPTIONS[$(".j-cov-type", el).value];
+      const noBack = $(".j-cov-noback", el).checked;
+      const covPages = noBack ? 1 : 2;
+      const perSet = cov.price * covPages + (noBack ? BACK_COVER_PRICE : 0);
+      sub += perSet * sets;
+      $(".j-cov-hint", el).textContent = (noBack
+        ? `ปกหน้า ${fmt(cov.price)} + เพิ่มปกหลัง ${fmt(BACK_COVER_PRICE)}`
+        : `ปกหน้า-ปกหลัง 2 หน้า × ${fmt(cov.price)}`) + ` = ชุดละ ${fmt(perSet)}${sets > 1 ? ` × ${sets} = ${fmt(perSet * sets)}` : ""} บาท · ถ้าไฟล์รวมหน้าปกไว้ ให้หักหน้าปกออกจากจำนวนหน้าด้านบน`;
+    }
+
     $(".j-sub", el).textContent = `${starting ? "เริ่ม " : ""}${fmt(sub)} บาท`;
     return { sub, starting };
   };
@@ -391,6 +413,7 @@
         <legend>ปก</legend>
         <label>กระดาษ<select class="p-cover">${pricedOptions(PORTFOLIO.covers)}</select></label>
         <label>จำนวนหน้า<input class="p-cover-qty" type="number" min="0" step="1" inputmode="numeric" value="2"></label>
+        <label class="chk chk--sm pf__back"><input type="checkbox" class="p-back"> <span>ไม่มีปกหลัง — เพิ่มปกหลังให้ แผ่นละ ${fmt(PORTFOLIO.backCover)} บาท</span></label>
       </fieldset>
       <fieldset class="pf__group">
         <legend>เนื้อใน</legend>
@@ -417,9 +440,11 @@
     const clear = bind.clearSheet ? PORTFOLIO.clearSheets[$(".p-clear", root).value] : PORTFOLIO.clearSheets[0];
     const coverCost = cover.price * coverQty;
     const innerCost = inner.price * innerQty;
-    const perBook = coverCost + innerCost + bind.price + clear.price;
+    const backCost = $(".p-back", root).checked ? PORTFOLIO.backCover : 0;
+    const perBook = coverCost + backCost + innerCost + bind.price + clear.price;
     $(".p-calc", root).textContent = [
       `ปก ${fmt(coverCost)}`,
+      backCost ? `เพิ่มปกหลัง ${fmt(backCost)}` : "",
       `เนื้อใน ${fmt(innerCost)}`,
       `เข้าเล่ม ${bind.startingAt ? "เริ่ม " : ""}${fmt(bind.price)}`,
       clear.price ? `แผ่นใส ${fmt(clear.price)}` : "",
@@ -481,6 +506,12 @@
     const pf = e.target.closest(".pf");
     if (!pf) return;
     const root = pf.parentElement;
+    if (e.target.matches(".p-back")) { // ไม่มีปกหลัง: พิมพ์ปกแค่หน้าเดียว
+      const qty = $(".p-cover-qty", root);
+      if (e.target.checked && qty.value === "2") qty.value = "1";
+      else if (!e.target.checked && qty.value === "1") qty.value = "2";
+      qty.dispatchEvent(new Event("input", { bubbles: true }));
+    }
     if (e.target.matches(".p-cover-qty") && root.dataset.pfTotal) pfApplyTotal(root);
     if (e.target.matches(".p-inner-qty")) { // ลูกค้าแก้เอง: เลิกคำนวณอัตโนมัติ
       delete root.dataset.pfTotal;
@@ -511,6 +542,7 @@
       <footer class="job__foot">รวมรายการนี้ <strong class="j-sub">0 บาท</strong></footer>`;
     if (from) {
       PF_FIELDS.forEach((sel) => { $(sel, el).value = $(sel, from).value; });
+      $(".p-back", el).checked = $(".p-back", from).checked;
       $(".p-status", el).textContent = $(".p-status", from).textContent;
       if (from.dataset.pfTotal) el.dataset.pfTotal = from.dataset.pfTotal;
     }

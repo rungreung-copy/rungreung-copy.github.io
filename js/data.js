@@ -122,10 +122,15 @@ const PRICE_BOARD = [
     ["เข้าเล่ม สันเกลียว", "เริ่มที่ เล่มละ 15 บาท"],
     ["เข้าเล่ม สันกระดูกงู", "เริ่มที่ เล่มละ 15 บาท"],
     ["เข้าเล่ม แบบมุงหลังคา", "เริ่มที่ เล่มละ 5 บาท"],
-  ], note: "ราคาเพิ่มขึ้นอยู่กับความหนาของเล่ม" },
+    ["เข้าเล่ม สันรูด", "เริ่มที่ เล่มละ 5 บาท"],
+    ["ปกหน้า-ปกหลัง กระดาษแข็ง PVC", "หน้าละ 15 บาท"],
+    ["ปกหน้า-ปกหลัง กระดาษโฟโต้", "หน้าละ 20 บาท"],
+    ["ไม่มีปกหลัง เพิ่มปกหลัง", "แผ่นละ 5 บาท"],
+  ], note: "ราคาเข้าเล่มเพิ่มขึ้นอยู่กับความหนาของเล่ม" },
   { title: "พอร์ตโฟลิโอ (Portfolio)", tone: "pink", rows: [
     ["ปก กระดาษขาวแข็ง PVC", "หน้าละ 15 บาท"],
     ["ปก กระดาษโฟโต้", "หน้าละ 20 บาท"],
+    ["ไม่มีปกหลัง เพิ่มปกหลัง", "แผ่นละ 5 บาท"],
     ["เนื้อใน กระดาษธรรมดา", "หน้าละ 10 บาท"],
     ["เนื้อใน กระดาษขาวแข็ง PVC", "หน้าละ 15 บาท"],
     ["เนื้อใน กระดาษโฟโต้", "หน้าละ 20 บาท"],
@@ -230,6 +235,12 @@ const CALC_CATEGORIES = [
     { name: "สันเกลียว", unit: "เล่ม", price: 15, startingAt: true },
     { name: "สันกระดูกงู", unit: "เล่ม", price: 15, startingAt: true },
     { name: "แบบมุงหลังคา", unit: "เล่ม", price: 5, startingAt: true },
+    { name: "สันรูด", unit: "เล่ม", price: 5, startingAt: true },
+  ]},
+  { id: "cover", name: "ปกหน้า-ปกหลัง", items: [
+    { name: "กระดาษแข็ง PVC", unit: "หน้า", price: 15 },
+    { name: "กระดาษโฟโต้", unit: "หน้า", price: 20 },
+    { name: "ไม่มีปกหลัง เพิ่มปกหลัง", unit: "แผ่น", price: 5 },
   ]},
 ];
 
@@ -240,7 +251,7 @@ const SERVICE_CALC = {
   print: { title: "ปริ้นท์งาน", cats: ["bw-print", "color-print-a4", "color-print-a3"] },
   "id-copy": { title: "สำเนาบัตร", cats: ["id-copy"] },
   scan: { title: "สแกนเอกสาร", cats: ["scan"] },
-  binding: { title: "เข้าเล่ม", cats: ["perfect-bind", "bind"] },
+  binding: { title: "เข้าเล่ม", cats: ["perfect-bind", "bind", "cover"] },
   laminate: { title: "เคลือบบัตร", cats: ["laminate"] },
   portfolio: { title: "พอร์ตโฟลิโอ", portfolio: true },
   leaflet: { title: "แผ่นพับสี", cats: ["leaflet"] },
@@ -250,6 +261,7 @@ const SERVICE_CALC = {
 /* ---------- พอร์ตโฟลิโอ: ปก / เนื้อใน / เข้าเล่ม แยกรายการ ---------- */
 const PORTFOLIO = {
   covers: [{ name: "กระดาษขาวแข็ง PVC", price: 15 }, { name: "กระดาษโฟโต้", price: 20 }],
+  backCover: 5, // ไม่มีปกหลัง: ร้านเพิ่มปกหลังให้ แผ่นละ 5 บาท
   inners: [{ name: "กระดาษธรรมดา", price: 10 }, { name: "กระดาษขาวแข็ง PVC", price: 15 }, { name: "กระดาษโฟโต้", price: 20 }],
   binds: [
     { name: "อัดกาวเคลือบปก", price: 50 },
@@ -299,7 +311,16 @@ const BIND_OPTIONS = [
   { id: "spiral", name: "สันเกลียว", price: 15, startingAt: true },
   { id: "comb", name: "สันกระดูกงู", price: 15, startingAt: true },
   { id: "saddle", name: "แบบมุงหลังคา", price: 5, startingAt: true },
+  { id: "slide", name: "สันรูด", price: 5, startingAt: true },
 ];
+
+/* ---------- ปกหน้า-ปกหลัง (ตัวเลือกเสริมของไฟล์ที่อัปโหลด) ----------
+   price = ต่อหน้า · backCover = ไม่มีปกหลัง ร้านเพิ่มปกหลังให้ แผ่นละ 5 บาท */
+const COVER_OPTIONS = [
+  { name: "กระดาษแข็ง PVC", price: 15 },
+  { name: "กระดาษโฟโต้", price: 20 },
+];
+const BACK_COVER_PRICE = 5;
 
 /* ---------- หมวดผลงาน (การ์ด Fan-Out) ----------
    id = ชื่อโฟลเดอร์ใน images/works/  · รูปในโฟลเดอร์ถูกอ่านอัตโนมัติ (js/works-manifest.js)
