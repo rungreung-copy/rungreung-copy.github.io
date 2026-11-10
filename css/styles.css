@@ -99,13 +99,25 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
   content: ""; position: absolute; z-index: 3; inset: auto 0 -1px; height: 92px; pointer-events: none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 130' preserveAspectRatio='none'%3E%3Cpath d='M0 40C230 0 470 70 720 54S1180 0 1440 20v110H0z' fill='%23c9dcf8'/%3E%3Cpath d='M0 66C240 106 480 120 720 98 980 74 1200 50 1440 38v92H0z' fill='%23fff'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat;
 }
-.hero__inner { position: relative; display: grid; grid-template-columns: minmax(0, 40%) minmax(0, 1fr); align-items: center; min-height: 620px; }
+.hero__inner { position: relative; display: grid; grid-template-columns: minmax(0, 45%) minmax(0, 1fr); align-items: center; min-height: 620px; }
 .hero__content { position: relative; z-index: 4; padding: 40px 0 120px; text-align: center; justify-self: start; }
 .hero__title { position: relative; margin: 0 0 18px; transform: rotate(-4deg); }
 .hero__title img { width: min(500px, 100%); height: auto; }
 .hero__title .swoosh { display: block; width: 100%; height: 26px; margin-top: 6px; }
 .hero__title .spark { position: absolute; left: -46px; top: -14px; width: 56px; height: 48px; transform: rotate(-10deg); }
 .hero__lead { margin: 0 0 26px; font: 600 clamp(1.5rem, 2.5vw, 2.25rem)/1.4 var(--font-head); color: var(--ink); transform: rotate(-4deg); }
+.hero__place {
+  position: relative; display: flex; align-items: center; gap: 14px; margin: 0 0 22px; padding: 8px 8px 8px 20px;
+  border: 4px solid var(--navy-800); border-radius: 999px; background: #fff7d9; box-shadow: var(--shadow); text-align: left;
+}
+.hero__pin { width: 50px; height: 78px; flex: none; }
+.hero__place-text { flex: 1; min-width: 0; margin: 0; }
+.hero__place-text span { display: block; font: 600 clamp(.85rem, 1.1vw, 1.02rem)/1.35 var(--font-head); color: var(--ink); }
+.hero__place-text strong {
+  display: inline-block; margin-top: 4px; padding: 0 18px; border-radius: 999px; background: #ffe27a; white-space: nowrap;
+  font: 700 clamp(1.6rem, 2.7vw, 2.5rem)/1.3 var(--font-head); color: #123a9c; box-shadow: inset 0 -4px 0 var(--yellow);
+}
+.hero__school { width: clamp(150px, 15vw, 210px); height: auto; aspect-ratio: 7 / 4; object-fit: cover; flex: none; border-radius: 999px; border: 3px solid var(--navy-800); }
 .hero__phone {
   display: inline-flex; align-items: center; gap: 14px; padding: 8px 26px 8px 8px; margin-bottom: 22px;
   border-radius: 999px; background: #fff; box-shadow: var(--shadow);
@@ -547,7 +559,8 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
 /* ---------- Footer ---------- */
 .footer { position: relative; margin-top: 30px; color: #fff; }
 .footer__waves { display: block; width: 100%; height: 120px; }
-.footer__body { background: #123a9c; padding: 6px 0 34px; margin-top: -1px; }
+.footer__body { position: relative; background: #123a9c; padding: 6px 0 34px; margin-top: -1px; }
+.footer__paws { position: absolute; right: max(20px, calc((100% - 1360px) / 2 - 70px)); top: -8px; width: 70px; height: 49px; opacity: .9; pointer-events: none; }
 .footer__inner { display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: center; gap: 24px 48px; }
 .footer__brand { display: flex; align-items: center; gap: 24px; padding-right: 48px; border-right: 1px solid rgba(255, 255, 255, .35); }
 .footer__logo { width: 124px; height: 124px; border-radius: 50%; border: 5px solid #fff; background: #fff; }
@@ -662,6 +675,11 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 .5em;
   .hero__title .spark { left: -18px; top: -24px; width: 40px; }
   .hero__lead { font-size: 1.35rem; }
   .hero__phone { font-size: .95rem; gap: 10px; padding-right: 18px; }
+  .hero__place { gap: 8px; padding: 6px 6px 6px 12px; border-width: 3px; }
+  .hero__pin { width: 34px; height: 54px; }
+  .hero__school { width: 92px; }
+  .hero__place-text strong { padding: 0 10px; }
+  .footer__paws { width: 48px; height: 34px; top: 0; right: 14px; }
   .hero__note { padding: 10px 14px 12px; bottom: 60px; font-size: 1.05rem; }
   .hero__spark { width: 40px; }
   .hero::after { height: 56px; }
